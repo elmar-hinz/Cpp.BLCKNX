@@ -1,0 +1,9 @@
+__pycache__
+.idea/
+/bin
+/Lib/GTest/
+/Testing/
+/cmake-build-debug/
+/python3.env/
+sample.txt
+result.txt
