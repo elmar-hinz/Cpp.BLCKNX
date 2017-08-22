@@ -20,20 +20,17 @@ void Edit::format() {
 }
 
 unsigned Edit::edit_distance(std::string strand1, std::string strand2) {
-    std::vector<unsigned> current(strand1.size() + 1);
-    std::iota(current.begin(), current.end(), 0);
-    std::vector<unsigned> last;
+    std::vector<unsigned> current, last(strand1.size() + 1);
+    std::iota(last.begin(), last.end(), 0);
     for (unsigned w = 0; w < strand2.size(); ++w) {
-        last = current;
         current = {w + 1};
         for (unsigned h = 0; h < strand2.size(); ++h) {
-            if (strand1[w] == strand2[h]) {
-                current.push_back(last[h]);
-            } else {
-                unsigned cand[] = {current[h], last[h], last[h + 1]};
-                current.push_back(*std::min_element(cand, cand + 3) + 1);
-            }
+            unsigned const indel = std::min(current[h], last[h + 1]) + 1;
+            unsigned const match = last[h] +
+                    static_cast<unsigned int>(strand1[w] != strand2[h]);
+            current.push_back(std::min(indel, match));
         }
+        last = current;
     }
     return current.back();
 }
