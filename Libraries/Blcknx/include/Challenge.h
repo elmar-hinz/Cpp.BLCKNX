@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-namespace challenges {
+namespace blcknx {
 
     class Challenge {
 

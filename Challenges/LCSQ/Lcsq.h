@@ -7,7 +7,7 @@
 
 #include <Challenge.h>
 
-class Lcsq : public challenges::Challenge {
+class Lcsq : public blcknx::Challenge {
 
 public:
     void build() override;

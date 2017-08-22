@@ -8,7 +8,7 @@
 #include <map>
 #include <Challenge.h>
 
-class Subs : public challenges::Challenge {
+class Subs : public blcknx::Challenge {
 
 public:
 

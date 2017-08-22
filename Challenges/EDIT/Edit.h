@@ -7,7 +7,7 @@
 
 #include "Challenge.h"
 
-class Edit : public challenges::Challenge {
+class Edit : public blcknx::Challenge {
 
 protected:
     std::pair<std::string, std::string> model;

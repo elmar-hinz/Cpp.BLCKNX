@@ -22,6 +22,7 @@ class Runner:
         elif self.conf.args.scaffold:
             if self.conf.args.challenge:
                 Scaffold(self.conf).scaffold()
+                self.reload_cmake()
             else:
                 self.conf.print_help()
         elif self.conf.args.challenge:
@@ -77,3 +78,7 @@ class Runner:
                                  bufsize=1)
         popen.wait()
         print(popen.stdout.read())
+
+    def reload_cmake(self):
+        subprocess.call(['cmake', self.conf.build])
+

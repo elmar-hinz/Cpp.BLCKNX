@@ -7,7 +7,7 @@
 
 #include <Challenge.h>
 
-class Rna : public challenges::Challenge {
+class Rna : public blcknx::Challenge {
 
 public:
     void build() override;

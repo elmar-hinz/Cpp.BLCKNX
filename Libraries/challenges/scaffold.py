@@ -146,7 +146,7 @@ TEST({}_test, main)
     {} challenge;
     std::string given = "";
     std::string expected = "";
-    EXPECT_EQ(expected, challenge.main(given);
+    EXPECT_EQ(expected, challenge.main(given));
 }}        
         '''
         n = self.conf.get_challenge_name();

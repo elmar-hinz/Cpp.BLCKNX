@@ -7,7 +7,7 @@
 #include <sstream>
 #include "Challenge.h"
 
-namespace challenges {
+namespace blcknx {
 
     void Challenge::run() {
         Challenge challenge;

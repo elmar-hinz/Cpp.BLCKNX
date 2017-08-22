@@ -9,10 +9,10 @@
 
 class ChallengeTest : public ::testing::Test {
 protected:
-    challenges::Challenge * challenge;
+    blcknx::Challenge * challenge;
 
     void SetUp() {
-        challenge = new challenges::Challenge();
+        challenge = new blcknx::Challenge();
     }
 
     void TearDown() {
@@ -23,7 +23,7 @@ protected:
 
 TEST_F(ChallengeTest, main_returns_empty_string_by_default)
 {
-    challenges::Challenge challenge;
+    blcknx::Challenge challenge;
     std::string actual = challenge.main("input");
     EXPECT_EQ("", actual);
 }
