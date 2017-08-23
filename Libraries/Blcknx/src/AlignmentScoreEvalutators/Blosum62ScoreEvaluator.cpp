@@ -2,15 +2,23 @@
 // Created by Elmar Hinz on 23.08.17.
 //
 
-#include <sstream>
+#include "Blosum62ScoreEvaluator.h"
 #include <vector>
-#include "Blosum62.h"
+#include <sstream>
 
-int blcknx::Blosum62::get(char char1, char char2) {
-    return table[char1][char2];
+int blcknx::Blosum62ScoreEvaluator::getScore(char deletion, char insertion) {
+    return table[deletion][insertion];
 }
 
-blcknx::Blosum62::Blosum62() {
+int blcknx::Blosum62ScoreEvaluator::getGapPenalty() {
+    return gapPenalty;
+}
+
+void blcknx::Blosum62ScoreEvaluator::setGapPenalty(int gapPenalty) {
+    this->gapPenalty = gapPenalty;
+}
+
+blcknx::Blosum62ScoreEvaluator::Blosum62ScoreEvaluator() {
     std::stringstream rows(definition);
     std::vector<char> header;
     std::string row;
@@ -37,3 +45,13 @@ blcknx::Blosum62::Blosum62() {
         i++;
     }
 }
+
+int blcknx::Blosum62ScoreEvaluator::getInsertionScore(char insertion) {
+    return gapPenalty;
+}
+
+int blcknx::Blosum62ScoreEvaluator::getDeletionScore(char deletion) {
+    return gapPenalty;
+}
+
+

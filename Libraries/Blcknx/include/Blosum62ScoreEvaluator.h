@@ -2,20 +2,31 @@
 // Created by Elmar Hinz on 23.08.17.
 //
 
-#ifndef BLCKNX_BLOSUM62_H
-#define BLCKNX_BLOSUM62_H
+#ifndef BLCKNX_BLOSUM62SCOREEVALUATOR_H
+#define BLCKNX_BLOSUM62SCOREEVALUATOR_H
 
-
-#include <string>
+#include "AlignmentScoreEvaluatorInterface.h"
 #include <map>
+#include <string>
 
 namespace blcknx {
 
-    class Blosum62 {
+    class Blosum62ScoreEvaluator : AlignmentScoreEvaluatorInterface {
     public:
-        Blosum62();
+        Blosum62ScoreEvaluator();
 
-        int get(char char1, char char2);
+        int getScore(char deletion, char insertion) override;
+
+        int getInsertionScore(char insertion) override;
+
+        int getDeletionScore(char deletion) override;
+
+    protected:
+        int gapPenalty = 0;
+    public:
+        int getGapPenalty();
+
+        void setGapPenalty(int gapPenalty);
 
     protected:
 
@@ -43,7 +54,6 @@ namespace blcknx {
                 "W -3 -2 -4 -3  1 -2 -2 -3 -3 -2 -1 -4 -4 -2 -3 -3 -2 -3 11  2\n"
                 "Y -2 -2 -3 -2  3 -3  2 -1 -2 -1 -1 -2 -3 -1 -2 -2 -2 -1  2  7";
     };
-
 }
 
-#endif //BLCKNX_BLOSUM62_H
+#endif //BLCKNX_BLOSUM62SCOREEVALUATOR_H
