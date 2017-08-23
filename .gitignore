@@ -4,7 +4,8 @@ __pycache__
 /Libraries/GTest/
 /Testing/
 /cmake-build-debug/
-/python3.env/
+/python.env/
 sample.txt
 result.txt
+latest.txt
 
