@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <numeric>
 #include "EditDistanceAlignment.h"
 
 namespace blcknx {
@@ -27,14 +28,8 @@ namespace blcknx {
         Alignment alignment = align(strand1, strand2);
         alignment1 = alignment.strand1;
         alignment2 = alignment.strand2;
-        alignmentScore = alignment.score;
         alignmentLength = alignment1.size();
-        alignmentDistance = alignmentLength - alignmentScore;
-        for (unsigned long i = 0; i < alignment1.size(); ++i) {
-            if(alignment1[i] == alignment2[i]) {
-                longestCommonSubsequence += alignment1[i];
-            }
-        }
+        alignmentDistance = alignment.distance;
     }
 
     const std::string &EditDistanceAlignment::getAlignment1() const {
@@ -45,17 +40,8 @@ namespace blcknx {
         return alignment2;
     }
 
-    const std::string &
-    EditDistanceAlignment::getLongestCommonSubsequence() const {
-        return longestCommonSubsequence;
-    }
-
     unsigned long EditDistanceAlignment::getAlignmentDistance() const {
         return alignmentDistance;
-    }
-
-    unsigned long EditDistanceAlignment::getAlignmentScore() const {
-        return alignmentScore;
     }
 
     unsigned long EditDistanceAlignment::getAlignmentLength() const {
@@ -79,8 +65,10 @@ namespace blcknx {
 
         // Meet in the middle
         std::vector<unsigned long> left = march(strand1, splitting.prefix);
-        std::vector<unsigned long> right = march(reversed(strand1), reversed(splitting.suffix));
-        Meeting meeting = meet(left, reversed(right), strand1, splitting.splitter);
+        std::vector<unsigned long> right = march(reversed(strand1),
+                                                 reversed(splitting.suffix));
+        Meeting meeting = meet(left, reversed(right), strand1,
+                               splitting.splitter);
 
         // Divide and conquer
         Alignment left_alignment = align(meeting.prefix, splitting.prefix);
@@ -88,7 +76,7 @@ namespace blcknx {
 
         // Build result
         Alignment alignment;
-        alignment.score = meeting.score;
+        alignment.distance = meeting.distance;
         alignment.strand1 = left_alignment.strand1
                             + meeting.char1
                             + right_alignment.strand1;
@@ -102,20 +90,21 @@ namespace blcknx {
             std::string strand1,
             std::string strand2
     ) {
-        unsigned long height = strand1.size() + 1;
-        unsigned long width = strand2.size() + 1;
-        std::vector<unsigned long> prev(height);
-        std::vector<unsigned long> curr(height);
-        for (unsigned long w = 1; w < width; w++) {
-            curr[0] = 0;
-            for (unsigned long h = 1; h < height; h++) {
-                unsigned long alt[3] = {curr[h - 1], prev[h], prev[h - 1]};
-                if (strand1[h - 1] == strand2[w - 1]) { alt[2] += 1; }
-                curr[h] = *std::max_element(alt, alt + 3);
+        std::vector<unsigned long> current, last(strand1.size() + 1);
+        std::iota(last.begin(), last.end(), 0);
+        for (unsigned long w = 0; w < strand2.size(); ++w) {
+            current = {w + 1};
+            for (unsigned long h = 0; h < strand1.size(); ++h) {
+                unsigned long indel
+                        = std::min(current[h], last[h + 1]) + 1;
+                unsigned long match = last[h] +
+                                      static_cast<unsigned long>( strand1[h] !=
+                                                                  strand2[w]);
+                current.push_back(std::min(indel, match));
             }
-            prev = curr;
+            last = current;
         }
-        return curr;
+        return last;
     }
 
     EditDistanceAlignment::Meeting EditDistanceAlignment::meet(
@@ -124,21 +113,22 @@ namespace blcknx {
             std::string strand,
             char splitter
     ) {
-        Meeting best = {0, '-', splitter, "", ""};
+        unsigned long max = strand1.size() + strand2.size();
+        Meeting best = {max , '-', splitter, "", ""};
         unsigned long strandSize = strand.size();
         for (unsigned long l = 0; l <= strandSize; ++l) {
             std::string prefix, suffix;
-            unsigned long horizontal = left[l] + right[l];
-            if (horizontal >= best.score) {
-                prefix = strand.substr(0, l),
-                        suffix = strand.substr(l, strandSize - l);
+            unsigned long horizontal = left[l] + right[l] + 1;
+            if (horizontal < best.distance) {
+                prefix = strand.substr(0, l);
+                suffix = strand.substr(l, strandSize - l);
                 best = {horizontal, '-', splitter, prefix, suffix};
             }
             if (l > 0) {
                 unsigned long diagonal = left[l - 1] + right[l];
                 char c = strand[l - 1];
-                if (c == splitter) { diagonal += 1; }
-                if (diagonal >= best.score) {
+                if (c != splitter) { diagonal += 1; }
+                if (diagonal < best.distance) {
                     prefix = strand.substr(0, l - 1);
                     suffix = strand.substr(l, strandSize - l);
                     best = {diagonal, c, splitter, prefix, suffix};
@@ -148,12 +138,14 @@ namespace blcknx {
         return best;
     }
 
-    EditDistanceAlignment::Splitting EditDistanceAlignment::split(std::string strand) {
+    EditDistanceAlignment::Splitting
+    EditDistanceAlignment::split(std::string strand) {
         unsigned long middle = strand.size() / 2;
         Splitting splitting;
         splitting.prefix = strand.substr(0, middle);
         splitting.splitter = strand[middle];
-        splitting.suffix = strand.substr(middle + 1, strand.size() - middle - 1);
+        splitting.suffix = strand.substr(middle + 1,
+                                         strand.size() - middle - 1);
         return splitting;
     }
 

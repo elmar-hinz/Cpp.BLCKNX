@@ -23,11 +23,7 @@ namespace blcknx {
 
         const std::string &getAlignment2() const;
 
-        const std::string &getLongestCommonSubsequence() const;
-
         unsigned long getAlignmentDistance() const;
-
-        unsigned long getAlignmentScore() const;
 
         unsigned long getAlignmentLength() const;
 
@@ -38,18 +34,16 @@ namespace blcknx {
         std::string strand2;
         std::string alignment1;
         std::string alignment2;
-        std::string longestCommonSubsequence;
         unsigned long alignmentDistance;
-        unsigned long alignmentScore;
         unsigned long alignmentLength;
 
         struct Alignment {
-            unsigned long score;
+            unsigned long distance;
             std::string strand1;
             std::string strand2;
 
             bool operator==(const Alignment &other) const {
-                return (score == other.score
+                return (distance == other.distance
                         && strand1 == other.strand1
                         && strand2 == other.strand2
                 );
@@ -70,14 +64,14 @@ namespace blcknx {
         };
 
         struct Meeting {
-            unsigned long score;
+            unsigned long distance;
             char char1;
             char char2;
             std::string prefix;
             std::string suffix;
 
             bool operator==(const Meeting &other) const {
-                return (score == other.score
+                return (distance == other.distance
                         && char1 == other.char1
                         && char2 == other.char2
                         && prefix == other.prefix

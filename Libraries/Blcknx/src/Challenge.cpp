@@ -10,12 +10,11 @@
 namespace blcknx {
 
     void Challenge::run() {
-        Challenge challenge;
         std::string input, line;
-        while (std::getline(std::cin, line)) {
+        while (std::getline(std::cin, line))  {
             input += line + "\n";
         }
-        std::cout << challenge.main(input);
+        std::cout << main(input) << std::endl;
     }
 
     std::string Challenge::main(std::string input) {

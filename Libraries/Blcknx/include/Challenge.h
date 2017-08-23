@@ -13,9 +13,9 @@ namespace blcknx {
     class Challenge {
 
     public:
-        std::string main(std::string input);
+        void run();
 
-        static void run();
+        std::string main(std::string input);
 
     protected:
 
