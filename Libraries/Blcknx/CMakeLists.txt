@@ -8,6 +8,7 @@ add_library(blcknx STATIC
         )
 
 # Testing
+include(CTest)
 add_executable(ChallengeTest
         include/Challenge.h
         tests/ChallengeTest.cpp
@@ -15,17 +16,17 @@ add_executable(ChallengeTest
 target_link_libraries(ChallengeTest gtest gtest_main blcknx)
 add_test(NAME Challenge COMMAND ChallengeTest)
 
-add_executable(EditDistanceTest include/EditDistance.h tests/EditDistanceTest.cpp)
+add_executable(EditDistanceTest include/EditDistance.h
+        tests/EditDistanceTest.cpp)
 target_link_libraries(EditDistanceTest gtest gtest_main blcknx)
-add_test(NAME EditDistanceTest COMMAND EditDistanceTest)
+add_test(NAME EditDistance COMMAND EditDistanceTest)
 
-add_executable(EditDistanceAlignmentTest
-        include/EditDistanceAlignment.h
+add_executable(EditDistanceAlignmentTest include/EditDistanceAlignment.h
         tests/EditDistanceAlignmentTest.cpp
         )
 target_link_libraries(EditDistanceAlignmentTest gtest gtest_main blcknx)
-add_test(NAME EditDistanceAlignmentTest COMMAND EditDistanceAlignmentTest)
+add_test(NAME EditDistanceAlignment COMMAND EditDistanceAlignmentTest)
 
 add_executable(Blosum62Test include/Blosum62.h tests/Blosum62Test.cpp)
 target_link_libraries(Blosum62Test gtest gtest_main blcknx)
-add_test(NAME Blosum62Test COMMAND Blosum62Test)
+add_test(NAME Blosum62 COMMAND Blosum62Test)

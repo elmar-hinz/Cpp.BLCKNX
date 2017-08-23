@@ -170,9 +170,9 @@ namespace blcknx {
         fixture.setStrand1("AABABABB");
         fixture.setStrand2("CCCACACAA");
         fixture.run();
-        EXPECT_EQ("AABABAB-B", fixture.getAlignment1());
-        EXPECT_EQ("CCCACACAA", fixture.getAlignment2());
-        EXPECT_EQ(9, fixture.getAlignmentLength());
+        EXPECT_EQ("A--ABABABB", fixture.getAlignment1());
+        EXPECT_EQ("CCCACACAA-", fixture.getAlignment2());
         EXPECT_EQ(7, fixture.getAlignmentDistance());
+        EXPECT_EQ(10, fixture.getAlignmentLength());
     }
 }
