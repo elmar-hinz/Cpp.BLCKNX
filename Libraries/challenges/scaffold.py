@@ -71,7 +71,8 @@ class Scaffold:
 
 int main()
 {{
-    {}::run();
+    {} challenge;
+    challenge.run();
     return 0;
 }}        
         '''

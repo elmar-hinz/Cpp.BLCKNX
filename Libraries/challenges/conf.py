@@ -25,7 +25,7 @@ class Conf:
         self.parser.add_argument('-f', '--file', action='store',
                                  help='load sample from given file')
         self.parser.add_argument('-k', '--klass', action='store_true',
-                                 help='use sample form challenge class file')
+                                 help='use sample form challenge class file - Not implemented yet')
         self.parser.add_argument('-l', '--list', action='store_true',
                                  help='list challenges')
         self.parser.add_argument('-s', '--scaffold', action='store_true',
@@ -110,4 +110,8 @@ class Conf:
 
     def get_test_bin(self):
         return '{}/{}_test'.format(
+            self.build, self.get_challenge_name_lower())
+
+    def get_bin(self):
+        return '{}/{}'.format(
             self.build, self.get_challenge_name_lower())

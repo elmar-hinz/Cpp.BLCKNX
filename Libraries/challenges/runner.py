@@ -32,41 +32,10 @@ class Runner:
         else:
             self.conf.print_help()
 
-    def run_challenge(self):
-        challenge = self.conf.get_challenge()
-        self.set_sample(challenge)
-        challenge.main()
-        self.write(challenge)
-
-    def set_sample(self, challenge):
-        if self.conf.args.file:
-            challenge.sample = self.read_file()
-        elif self.conf.args.klass:
-            challenge.sample = challenge.sample
-        else:
-            stdin = sys.stdin.read().strip()
-            if stdin:
-                challenge.sample = stdin
-            else:
-                self.conf.print_help()
-
     def read_file(self):
         with open(self.conf.get_input_file(), 'r') as pointer:
             sample = pointer.read()
         return sample
-
-    def write(self, challenge):
-        result = challenge.output
-        print(result)
-        with open(self.conf.get_latest_file(), 'w') as pointer:
-            pointer.write(result)
-        with open(self.conf.get_latest_at_root(), 'w') as pointer:
-            pointer.write(result)
-        if self.conf.args.write:
-            with open(self.conf.get_sample_file(), 'w') as pointer:
-                pointer.write(challenge.sample)
-            with open(self.conf.get_result_file(), 'w') as pointer:
-                pointer.write(result)
 
     def list_challenges(self):
         print(' * ' + '\n * '.join(self.conf.get_challenges()))
@@ -79,6 +48,35 @@ class Runner:
         popen.wait()
         print(popen.stdout.read())
 
+    def run_challenge(self):
+        sample = ""
+        if self.conf.args.file:
+            sample = self.read_file()
+        if not sample:
+            self.conf.print_help()
+        else:
+            pipe = subprocess.Popen(self.conf.get_bin(),
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    universal_newlines=True,
+                                    bufsize=1)
+            result = pipe.communicate(input=sample)[0]
+            pipe.stdin.close()
+            pipe.stdout.close()
+            print(result)
+            self.write(sample, result)
+
     def reload_cmake(self):
         subprocess.call(['cmake', self.conf.build])
+
+    def write(self, sample, result):
+        with open(self.conf.get_latest_file(), 'w') as pointer:
+            pointer.write(result)
+        with open(self.conf.get_latest_at_root(), 'w') as pointer:
+            pointer.write(result)
+        if self.conf.args.write:
+            with open(self.conf.get_sample_file(), 'w') as pointer:
+                pointer.write(sample)
+            with open(self.conf.get_result_file(), 'w') as pointer:
+                pointer.write(result)
 
