@@ -6,6 +6,7 @@
 
 int main()
 {
-    Revc::run();
+    Revc challenge;
+    challenge.run();
     return 0;
 }

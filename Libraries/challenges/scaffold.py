@@ -90,7 +90,7 @@ int main()
 
 #include <Challenge.h>
 
-class {} : public challenges::Challenge {{
+class {} : public blcknx::Challenge {{
 
 public:
     void build() override;
