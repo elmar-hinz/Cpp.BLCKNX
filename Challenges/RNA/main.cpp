@@ -6,7 +6,8 @@
 
 int main()
 {
-    Rna::run();
+    Rna challenge;
+    challenge.run();
     return 0;
 }
 

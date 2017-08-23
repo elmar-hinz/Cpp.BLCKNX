@@ -6,6 +6,7 @@
 
 int main()
 {
-    Subs::run();
+    Subs challenge;
+    challenge.run();
     return 0;
 }

@@ -6,6 +6,7 @@
 
 int main()
 {
-    Dna::run();
+    Dna challenge;
+    challenge.run();
     return 0;
 }

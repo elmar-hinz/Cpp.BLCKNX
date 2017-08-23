@@ -2,6 +2,7 @@
 #include "Lcsm.h"
 
 int main() {
-    Lcsm::run();
+    Lcsm challenge;
+    challenge.run();
     return 0;
 }

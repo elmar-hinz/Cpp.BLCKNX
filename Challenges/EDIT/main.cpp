@@ -6,6 +6,7 @@
 
 int main()
 {
-    Edit::run();
+    Edit challenge;
+    challenge.run();
     return 0;
 }

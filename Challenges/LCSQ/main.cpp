@@ -6,6 +6,7 @@
 
 int main()
 {
-    Lcsq::run();
+    Lcsq challenge;
+    challenge.run();
     return 0;
 }

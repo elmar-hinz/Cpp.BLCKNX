@@ -6,6 +6,7 @@
 
 int main()
 {
-    Edta::run();
+    Edta challenge;
+    challenge.run();
     return 0;
 }

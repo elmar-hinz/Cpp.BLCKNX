@@ -3,7 +3,6 @@
 //
 
 #include "Edta.h"
-#include "EditDistanceAlignment.h"
 
 void Edta::build() {
     model = fasta_strands(to_lines(input));
