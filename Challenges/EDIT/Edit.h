@@ -19,7 +19,7 @@ protected:
 
     void format() override;
 
-    unsigned edit_distance(std::string strand1, std::string strand2);
+    unsigned edit_distance(std::string &strand1, std::string &strand2);
 };
 
 

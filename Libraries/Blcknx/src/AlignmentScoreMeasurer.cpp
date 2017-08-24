@@ -46,10 +46,10 @@ namespace blcknx {
         std::vector<long> current(strand1.size() + 1);
         char char1, char2;
         last[0] = 0;
-        for (long index1 = 1; index1 <= strand2.size(); ++index1) {
-            char2 = strand1[index1 - 1];
+        for (long index1 = 1; index1 <= strand1.size(); ++index1) {
+            char1 = strand1[index1 - 1];
             last[index1] =
-                    last[index1 - 1] + evaluator->getDeletionScore(char2);
+                    last[index1 - 1] + evaluator->getDeletionScore(char1);
         }
         for (long index2 = 1; index2 <= strand2.size(); ++index2) {
             char1 = strand2[index2 - 1];

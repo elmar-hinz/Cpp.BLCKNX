@@ -6,6 +6,7 @@ add_library(blcknx STATIC
         src/EditDistanceAlignment.cpp
         src/AlignmentScoreEvalutators/Blosum62ScoreEvaluator.cpp
         src/AlignmentScoreEvalutators/LongestCommenSubsequenceScoreEvaluator.cpp
+        src/AlignmentScoreEvalutators/EditDistanceScoreEvaluator.cpp
         )
 
 # Testing
@@ -42,3 +43,11 @@ add_executable(LongestCommenSubsequenceScoreEvaluatorTest
         )
 target_link_libraries(LongestCommenSubsequenceScoreEvaluatorTest gtest gtest_main blcknx)
 add_test(NAME LongestCommenSubsequenceScoreEvaluator COMMAND LongestCommenSubsequenceScoreEvaluatorTest)
+
+add_executable(EditDistanceScoreEvaluatorTest
+        tests/EditDistanceScoreEvaluatorTest.cpp
+        include/AlignmentScoreEvaluatorInterface.h
+        include/EditDistanceScoreEvaluator.h
+        )
+target_link_libraries(EditDistanceScoreEvaluatorTest gtest gtest_main blcknx)
+add_test(NAME EditDistanceScoreEvaluator COMMAND EditDistanceScoreEvaluatorTest)

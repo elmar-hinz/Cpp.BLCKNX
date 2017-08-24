@@ -7,7 +7,6 @@
 
 TEST(LongestCommenSubsequenceScoreEvaluatorTest, full)
 {
-    EXPECT_EQ(1, 1);
     blcknx::LongestCommenSubsequenceScoreEvaluator evaluator;
     EXPECT_EQ(1, evaluator.getScore('A', 'A'));
     EXPECT_EQ(0, evaluator.getScore('A', 'Y'));
