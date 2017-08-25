@@ -11,14 +11,13 @@
 
 class Edta : public blcknx::Challenge {
 
-public:
+protected:
     void build() override;
 
     void calc() override;
 
     void format() override;
 
-protected:
     std::vector<std::string> model;
     blcknx::Aligner result;
     blcknx::EditDistanceScoreProvider provider;

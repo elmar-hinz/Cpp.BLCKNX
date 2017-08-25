@@ -7,9 +7,10 @@
 
 #include <string>
 #include "EditDistanceScoreProvider.h"
-#include "AlignmentScoreProviderInterface.h"
 
 namespace blcknx {
+    class AlignmentScoreProviderInterface;
+
     class Aligner {
     public:
         void setScoreProvider(AlignmentScoreProviderInterface *scoreProvider);
