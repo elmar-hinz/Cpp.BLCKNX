@@ -71,7 +71,7 @@ class Scaffold:
 
 int main()
 {{
-    {} challenge;
+    blcknx::{} challenge;
     challenge.run();
     return 0;
 }}        
@@ -90,17 +90,20 @@ int main()
 
 #include <Challenge.h>
 
-class {} : public blcknx::Challenge {{
+namespace blcknx {{
 
-public:
-    void build() override;
+    class {} : public Challenge {{
 
-    void calc() override;
+    protected:
+        void build() override;
 
-    void format() override;
+        void calc() override;
 
-protected:
-}};
+        void format() override;
+
+    }};
+
+}}
 
 
 #endif //BLCKNX_{}_H
@@ -119,14 +122,18 @@ protected:
 
 #include "{}.h"
 
-void {}::build() {{
-}}
+namespace blcknx {{
 
-void {}::calc() {{
-}}
+    void {}::build() {{
+    }}
 
-void {}::format() {{
-}}        
+    void {}::calc() {{
+    }}
+
+    void {}::format() {{
+    }}        
+    
+}}
         '''
         n = self.conf.get_challenge_name();
         return text.strip().format(datetime.today(), n, n, n, n)
@@ -142,13 +149,17 @@ void {}::format() {{
 #define private public
 #include "{}.h"
 
-TEST({}_test, main)
-{{
-    {} challenge;
-    std::string given = "";
-    std::string expected = "";
-    EXPECT_EQ(expected, challenge.main(given));
-}}        
+namespace blcknx {{
+
+    TEST({}_test, main)
+    {{
+        {} challenge;
+        std::string given = "";
+        std::string expected = "";
+        EXPECT_EQ(expected, challenge.main(given));
+    }}        
+
+}}
         '''
         n = self.conf.get_challenge_name();
         return text.strip().format(datetime.today(), n, n.lower(), n)

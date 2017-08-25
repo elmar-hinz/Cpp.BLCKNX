@@ -61,8 +61,8 @@ namespace blcknx {
                 long insertion =
                         last[index1] + evaluator->getInsertionScore(char1);
                 long indel = std::max(insertion, deletion);
-                long match =
-                        last[index1 - 1] + evaluator->getScore(char2, char1);
+                long s = evaluator->getScore(char1, char2);
+                long match = last[index1 - 1] + s;
                 current[index1] = std::max(indel, match);
             }
             last = current;
