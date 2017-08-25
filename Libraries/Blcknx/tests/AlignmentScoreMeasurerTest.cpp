@@ -7,30 +7,30 @@
 #define protected public
 
 #include "AlignmentScoreMeasurer.h"
-#include "LongestCommenSubsequenceScoreEvaluator.h"
+#include "LongestCommenSubsequenceScoreProvider.h"
 
 
 namespace blcknx {
     class AlignmentScoreMeasurerTest : public ::testing::Test {
     public:
-        class Evaluator : public LongestCommenSubsequenceScoreEvaluator {};
-        Evaluator evaluator;
+        class Provider : public LongestCommenSubsequenceScoreProvider {};
+        Provider provider;
         AlignmentScoreMeasurer measurer;
 
     protected:
 
         void SetUp() override {
-            Evaluator e;
-            evaluator = std::move(e);
+            Provider e;
+            provider = std::move(e);
             AlignmentScoreMeasurer m;
             measurer = std::move(m);
-            measurer.setScoreEvaluator(&evaluator);
+            measurer.setScoreProvider(&provider);
         }
 
     };
 
     TEST_F(AlignmentScoreMeasurerTest, getters) {
-        EXPECT_EQ(&evaluator, measurer.getScoreEvaluator());
+        EXPECT_EQ(&provider, measurer.getScoreProvider());
         measurer.setStrand1("S1");
         measurer.setStrand2("S2");
         EXPECT_EQ("S1", measurer.getStrand1());

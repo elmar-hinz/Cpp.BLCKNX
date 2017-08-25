@@ -2,14 +2,15 @@
 // Created by Elmar Hinz on 23.08.17.
 //
 
-#include "Blosum62ScoreEvaluator.h"
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include "Blosum62ScoreProvider.h"
+#include "TableReader.h"
 
 namespace blcknx {
 
-    Blosum62ScoreEvaluator::Blosum62ScoreEvaluator() {
+    Blosum62ScoreProvider::Blosum62ScoreProvider() {
         gapPenalty = 0;
 
         std::string definition =
@@ -35,50 +36,26 @@ namespace blcknx {
                 "W -3 -2 -4 -3  1 -2 -2 -3 -3 -2 -1 -4 -4 -2 -3 -3 -2 -3 11  2\n"
                 "Y -2 -2 -3 -2  3 -3  2 -1 -2 -1 -1 -2 -3 -1 -2 -2 -2 -1  2  7";
 
-        std::stringstream rows(definition);
-        std::vector<char> header;
-        std::string row;
-
-        // Read header
-        char key;
-        std::getline(rows, row, '\n');
-        std::stringstream ss(row);
-        ss >> key; // discard vertical index
-        while (ss >> key) { header.push_back(key); }
-
-        // Read lines
-        std::string cell;
-        int i = 0;
-        while (std::getline(rows, row, '\n')) {
-            std::stringstream ssr(row);
-            std::getline(ssr, cell, ' '); // discard vertical index
-            int j = 0;
-            while (ssr >> cell) {
-                table[header[i]][header[j]] = std::stoi(cell);
-                table[header[j]][header[i]] = std::stoi(cell);
-                j++;
-            }
-            i++;
-        }
+        TableReader::read(definition, table);
     }
 
-    void Blosum62ScoreEvaluator::setGapPenalty(int gapPenalty) {
+    void Blosum62ScoreProvider::setGapPenalty(int gapPenalty) {
         this->gapPenalty = gapPenalty;
     }
 
-    int Blosum62ScoreEvaluator::getGapPenalty() {
+    int Blosum62ScoreProvider::getGapPenalty() {
         return gapPenalty;
     }
 
-    int Blosum62ScoreEvaluator::getScore(char deletion, char insertion) {
+    int Blosum62ScoreProvider::getScore(char deletion, char insertion) {
         return table[deletion][insertion];
     }
 
-    int Blosum62ScoreEvaluator::getInsertionScore(char insertion) {
+    int Blosum62ScoreProvider::getInsertionScore(char insertion) {
         return gapPenalty;
     }
 
-    int Blosum62ScoreEvaluator::getDeletionScore(char deletion) {
+    int Blosum62ScoreProvider::getDeletionScore(char deletion) {
         return gapPenalty;
     }
 

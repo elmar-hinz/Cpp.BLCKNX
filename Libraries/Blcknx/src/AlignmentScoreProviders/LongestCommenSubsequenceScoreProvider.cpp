@@ -2,9 +2,9 @@
 // Created by Elmar Hinz on 23.08.17.
 //
 
-#include "LongestCommenSubsequenceScoreEvaluator.h"
+#include "LongestCommenSubsequenceScoreProvider.h"
 
-int blcknx::LongestCommenSubsequenceScoreEvaluator::getScore(char char1,
+int blcknx::LongestCommenSubsequenceScoreProvider::getScore(char char1,
                                                              char char2) {
     if(char1 == char2) {
         return 1;
@@ -13,12 +13,12 @@ int blcknx::LongestCommenSubsequenceScoreEvaluator::getScore(char char1,
     }
 }
 
-int blcknx::LongestCommenSubsequenceScoreEvaluator::getDeletionScore(
+int blcknx::LongestCommenSubsequenceScoreProvider::getDeletionScore(
         char deletion) {
     return 0;
 }
 
-int blcknx::LongestCommenSubsequenceScoreEvaluator::getInsertionScore(
+int blcknx::LongestCommenSubsequenceScoreProvider::getInsertionScore(
         char insertion) {
     return 0;
 }

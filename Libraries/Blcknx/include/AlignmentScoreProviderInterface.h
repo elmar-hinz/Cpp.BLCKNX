@@ -2,11 +2,11 @@
 // Created by Elmar Hinz on 23.08.17.
 //
 
-#ifndef BLCKNX_ALIGNMENTSCOREEVALUATORINTERFACE_H
-#define BLCKNX_ALIGNMENTSCOREEVALUATORINTERFACE_H
+#ifndef BLCKNX_ALIGNMENTSCOREPROVIDERINTERFACE_H
+#define BLCKNX_ALIGNMENTSCOREPROVIDERINTERFACE_H
 
 namespace blcknx {
-    class AlignmentScoreEvaluatorInterface {
+    class AlignmentScoreProviderInterface {
     public:
         virtual int getScore(char deletion, char insertion) = 0;
         virtual int getDeletionScore(char deletion) = 0;
@@ -14,4 +14,4 @@ namespace blcknx {
     };
 }
 
-#endif //BLCKNX_ALIGNMENTSCOREEVALUATORINTERFACE_H
+#endif //BLCKNX_ALIGNMENTSCOREPROVIDERINTERFACE_H

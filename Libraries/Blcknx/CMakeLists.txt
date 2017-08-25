@@ -3,10 +3,12 @@ include_directories(include)
 add_library(blcknx STATIC
         src/Challenge.cpp
         src/AlignmentScoreMeasurer.cpp
-        src/EditDistanceAlignment.cpp
-        src/AlignmentScoreEvalutators/Blosum62ScoreEvaluator.cpp
-        src/AlignmentScoreEvalutators/LongestCommenSubsequenceScoreEvaluator.cpp
-        src/AlignmentScoreEvalutators/EditDistanceScoreEvaluator.cpp
+        src/Aligner.cpp
+        src/TableReader.cpp
+        src/AlignmentScoreProviders/Blosum62ScoreProvider.cpp
+        src/AlignmentScoreProviders/Pam250ScoreProvider.cpp
+        src/AlignmentScoreProviders/LongestCommenSubsequenceScoreProvider.cpp
+        src/AlignmentScoreProviders/EditDistanceScoreProvider.cpp
         )
 
 # Testing
@@ -23,31 +25,47 @@ add_executable(AlignmentScoreMeasurerTest include/AlignmentScoreMeasurer.h
 target_link_libraries(AlignmentScoreMeasurerTest gtest gtest_main blcknx)
 add_test(NAME AlignmentScoreMeasurer COMMAND AlignmentScoreMeasurerTest)
 
-add_executable(EditDistanceAlignmentTest include/EditDistanceAlignment.h
-        tests/EditDistanceAlignmentTest.cpp)
+add_executable(EditDistanceAlignmentTest include/Aligner.h
+        tests/AlignerTest.cpp)
 target_link_libraries(EditDistanceAlignmentTest gtest gtest_main blcknx)
 add_test(NAME EditDistanceAlignment COMMAND EditDistanceAlignmentTest)
 
-add_executable(Blosum62ScoreEvaluatorTest
-        tests/Blosum62ScoreEvaluatorTest.cpp
-        include/AlignmentScoreEvaluatorInterface.h
-        include/Blosum62ScoreEvaluator.h
+add_executable(TableReaderTest
+        tests/TableReaderTest.cpp
+        include/TableReader.h
         )
-target_link_libraries(Blosum62ScoreEvaluatorTest gtest gtest_main blcknx)
-add_test(NAME Blosum62ScoreEvaluator COMMAND Blosum62ScoreEvaluatorTest)
+target_link_libraries(TableReaderTest gtest gtest_main blcknx)
+add_test(NAME TableReader COMMAND TableReaderTest)
 
-add_executable(LongestCommenSubsequenceScoreEvaluatorTest
-        tests/LongestCommenSubsequenceScoreEvaluatorTest.cpp
-        include/AlignmentScoreEvaluatorInterface.h
-        include/LongestCommenSubsequenceScoreEvaluator.h
+add_executable(Pam250ScoreProviderTest
+        tests/Pam250ScoreProviderTest.cpp
+        include/AlignmentScoreProviderInterface.h
+        include/Pam250ScoreProvider.h
         )
-target_link_libraries(LongestCommenSubsequenceScoreEvaluatorTest gtest gtest_main blcknx)
-add_test(NAME LongestCommenSubsequenceScoreEvaluator COMMAND LongestCommenSubsequenceScoreEvaluatorTest)
+target_link_libraries(Pam250ScoreProviderTest gtest gtest_main blcknx)
+add_test(NAME Pam250ScoreProvider COMMAND Pam250ScoreProviderTest)
 
-add_executable(EditDistanceScoreEvaluatorTest
-        tests/EditDistanceScoreEvaluatorTest.cpp
-        include/AlignmentScoreEvaluatorInterface.h
-        include/EditDistanceScoreEvaluator.h
+add_executable(Blosum62ScoreProviderTest
+        tests/Blosum62ScoreProviderTest.cpp
+        include/AlignmentScoreProviderInterface.h
+        include/Blosum62ScoreProvider.h
         )
-target_link_libraries(EditDistanceScoreEvaluatorTest gtest gtest_main blcknx)
-add_test(NAME EditDistanceScoreEvaluator COMMAND EditDistanceScoreEvaluatorTest)
+target_link_libraries(Blosum62ScoreProviderTest gtest gtest_main blcknx)
+add_test(NAME Blosum62ScoreProvider COMMAND Blosum62ScoreProviderTest)
+
+add_executable(LongestCommenSubsequenceScoreProviderTest
+        tests/LongestCommenSubsequenceScoreProviderTest.cpp
+        include/AlignmentScoreProviderInterface.h
+        include/LongestCommenSubsequenceScoreProvider.h
+        )
+target_link_libraries(LongestCommenSubsequenceScoreProviderTest gtest gtest_main blcknx)
+add_test(NAME LongestCommenSubsequenceScoreProvider COMMAND LongestCommenSubsequenceScoreProviderTest)
+
+add_executable(EditDistanceScoreProviderTest
+        tests/EditDistanceScoreProviderTest.cpp
+        include/AlignmentScoreProviderInterface.h
+        include/EditDistanceScoreProvider.h
+        )
+target_link_libraries(EditDistanceScoreProviderTest gtest gtest_main blcknx)
+add_test(NAME EditDistanceScoreProvider COMMAND EditDistanceScoreProviderTest)
+

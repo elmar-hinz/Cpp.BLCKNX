@@ -6,7 +6,8 @@
 #define BLCKNX_EDTA_H
 
 #include <Challenge.h>
-#include "EditDistanceAlignment.h"
+#include "Aligner.h"
+#include "EditDistanceScoreProvider.h"
 
 class Edta : public blcknx::Challenge {
 
@@ -19,7 +20,8 @@ public:
 
 protected:
     std::vector<std::string> model;
-    blcknx::EditDistanceAlignment result;
+    blcknx::Aligner result;
+    blcknx::EditDistanceScoreProvider provider;
 };
 
 

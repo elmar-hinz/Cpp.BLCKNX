@@ -4,7 +4,7 @@
 
 #include "Glob.h"
 #include "AlignmentScoreMeasurer.h"
-#include "Blosum62ScoreEvaluator.h"
+#include "Blosum62ScoreProvider.h"
 
 namespace blcknx {
 
@@ -16,9 +16,9 @@ namespace blcknx {
 
     void Glob::calc() {
         AlignmentScoreMeasurer measurer;
-        Blosum62ScoreEvaluator evaluator;
-        evaluator.setGapPenalty(-5);
-        measurer.setScoreEvaluator(&evaluator);
+        Blosum62ScoreProvider provider;
+        provider.setGapPenalty(-5);
+        measurer.setScoreProvider(&provider);
         result = measurer.measure(model.first, model.second);
     }
 

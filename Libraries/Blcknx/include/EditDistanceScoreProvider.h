@@ -2,14 +2,14 @@
 // Created by Elmar Hinz on 24.08.17.
 //
 
-#ifndef BLCKNX_EDITDISTANCESCOREEVALUATOR_H
-#define BLCKNX_EDITDISTANCESCOREEVALUATOR_H
+#ifndef BLCKNX_EDITDISTANCESCOREPROVIDER_H
+#define BLCKNX_EDITDISTANCESCOREPROVIDER_H
 
 
-#include "AlignmentScoreEvaluatorInterface.h"
+#include "AlignmentScoreProviderInterface.h"
 
 namespace blcknx {
-    class EditDistanceScoreEvaluator : public AlignmentScoreEvaluatorInterface {
+    class EditDistanceScoreProvider : public AlignmentScoreProviderInterface {
     public:
         int getScore(char deletion, char insertion) override;
 
@@ -20,4 +20,4 @@ namespace blcknx {
 }
 
 
-#endif //BLCKNX_EDITDISTANCESCOREEVALUATOR_H
+#endif //BLCKNX_EDITDISTANCESCOREPROVIDER_H

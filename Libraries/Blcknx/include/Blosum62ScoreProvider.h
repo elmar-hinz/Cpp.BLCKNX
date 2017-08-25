@@ -2,18 +2,18 @@
 // Created by Elmar Hinz on 23.08.17.
 //
 
-#ifndef BLCKNX_BLOSUM62SCOREEVALUATOR_H
-#define BLCKNX_BLOSUM62SCOREEVALUATOR_H
+#ifndef BLCKNX_BLOSUM62SCOREPROVIDER_H
+#define BLCKNX_BLOSUM62SCOREPROVIDER_H
 
-#include "AlignmentScoreEvaluatorInterface.h"
+#include "AlignmentScoreProviderInterface.h"
 #include <map>
 #include <string>
 
 namespace blcknx {
 
-    class Blosum62ScoreEvaluator : public AlignmentScoreEvaluatorInterface {
+    class Blosum62ScoreProvider : public AlignmentScoreProviderInterface {
     public:
-        Blosum62ScoreEvaluator();
+        Blosum62ScoreProvider();
 
         int getScore(char deletion, char insertion) override;
 
@@ -32,4 +32,4 @@ namespace blcknx {
     };
 }
 
-#endif //BLCKNX_BLOSUM62SCOREEVALUATOR_H
+#endif //BLCKNX_BLOSUM62SCOREPROVIDER_H

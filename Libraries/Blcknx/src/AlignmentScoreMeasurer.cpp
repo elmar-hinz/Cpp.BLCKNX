@@ -7,14 +7,14 @@
 
 namespace blcknx {
 
-    void AlignmentScoreMeasurer::setScoreEvaluator(
-            AlignmentScoreEvaluatorInterface *evaluator) {
-        this->evaluator = evaluator;
+    void AlignmentScoreMeasurer::setScoreProvider(
+            AlignmentScoreProviderInterface *provider) {
+        this->provider = provider;
     }
 
-    AlignmentScoreEvaluatorInterface *
-    AlignmentScoreMeasurer::getScoreEvaluator() const {
-        return evaluator;
+    AlignmentScoreProviderInterface *
+    AlignmentScoreMeasurer::getScoreProvider() const {
+        return provider;
     }
 
     void AlignmentScoreMeasurer::setStrand1(std::string strand1) {
@@ -48,20 +48,21 @@ namespace blcknx {
         last[0] = 0;
         for (long index1 = 1; index1 <= strand1.size(); ++index1) {
             char1 = strand1[index1 - 1];
+            long ds = provider->getDeletionScore(char1);
             last[index1] =
-                    last[index1 - 1] + evaluator->getDeletionScore(char1);
+                    last[index1 - 1] + provider->getDeletionScore(char1);
         }
         for (long index2 = 1; index2 <= strand2.size(); ++index2) {
             char1 = strand2[index2 - 1];
-            current[0] = last[0] + evaluator->getInsertionScore(char1);
+            current[0] = last[0] + provider->getInsertionScore(char1);
             for (long index1 = 1; index1 <= strand1.size(); ++index1) {
                 char2 = strand1[index1 - 1];
                 long deletion = current[index1 - 1] +
-                                evaluator->getDeletionScore(char2);
+                                provider->getDeletionScore(char2);
                 long insertion =
-                        last[index1] + evaluator->getInsertionScore(char1);
+                        last[index1] + provider->getInsertionScore(char1);
                 long indel = std::max(insertion, deletion);
-                long s = evaluator->getScore(char1, char2);
+                long s = provider->getScore(char1, char2);
                 long match = last[index1 - 1] + s;
                 current[index1] = std::max(indel, match);
             }

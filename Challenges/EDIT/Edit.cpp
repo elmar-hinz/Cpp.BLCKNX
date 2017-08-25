@@ -4,7 +4,7 @@
 
 #include <numeric>
 #include "Edit.h"
-#include "EditDistanceScoreEvaluator.h"
+#include "EditDistanceScoreProvider.h"
 #include "AlignmentScoreMeasurer.h"
 
 void Edit::build() {
@@ -23,8 +23,8 @@ void Edit::format() {
 
 unsigned Edit::edit_distance(std::string &strand1, std::string &strand2) {
     blcknx::AlignmentScoreMeasurer measurer;
-    auto *evaluator = new blcknx::EditDistanceScoreEvaluator;
-    measurer.setScoreEvaluator(evaluator);
+    auto *evaluator = new blcknx::EditDistanceScoreProvider;
+    measurer.setScoreProvider(evaluator);
     unsigned int result = static_cast<unsigned int>(
             -measurer.measure(strand1, strand2));
     delete (evaluator);

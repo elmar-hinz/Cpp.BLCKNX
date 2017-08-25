@@ -6,10 +6,13 @@
 #define BLCKNX_EDITDISTANCEALIGNMENT_H
 
 #include <string>
+#include "EditDistanceScoreProvider.h"
+#include "AlignmentScoreProviderInterface.h"
 
 namespace blcknx {
-    class EditDistanceAlignment {
+    class Aligner {
     public:
+        void setScoreProvider(AlignmentScoreProviderInterface *scoreProvider);
 
         void setStrand1(const std::string &strand1);
 
@@ -23,9 +26,9 @@ namespace blcknx {
 
         const std::string &getAlignment2() const;
 
-        unsigned long getAlignmentDistance() const;
+        long getAlignmentDistance() const;
 
-        unsigned long getAlignmentLength() const;
+        long getAlignmentLength() const;
 
         void run();
 
@@ -34,11 +37,13 @@ namespace blcknx {
         std::string strand2;
         std::string alignment1;
         std::string alignment2;
-        unsigned long alignmentDistance;
-        unsigned long alignmentLength;
+        long alignmentDistance;
+        long alignmentLength;
+        AlignmentScoreProviderInterface * scoreProvider;
+
 
         struct Alignment {
-            unsigned long distance;
+            long distance;
             std::string strand1;
             std::string strand2;
 
@@ -64,7 +69,7 @@ namespace blcknx {
         };
 
         struct Meeting {
-            unsigned long distance;
+            long distance;
             char char1;
             char char2;
             std::string prefix;
@@ -82,13 +87,12 @@ namespace blcknx {
 
         Alignment align(std::string strand1, std::string strand2);
 
-        EditDistanceAlignment::Splitting split(std::string strand);
+        Aligner::Splitting split(std::string strand);
 
-        std::vector<unsigned long>
-        march(std::string strand1, std::string strand2);
+        std::vector<long> march(std::string strand1, std::string strand2);
 
         Meeting
-        meet(std::vector<unsigned long>, std::vector<unsigned long>, std::string, char);
+        meet(std::vector<long>, std::vector<long>, std::string, char);
 
         template<typename T>
         T reversed(T copy);

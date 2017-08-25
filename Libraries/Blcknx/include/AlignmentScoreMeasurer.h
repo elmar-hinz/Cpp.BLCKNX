@@ -7,14 +7,14 @@
 
 #include <vector>
 #include <string>
-#include "AlignmentScoreEvaluatorInterface.h"
+#include "AlignmentScoreProviderInterface.h"
 
 namespace blcknx {
     class AlignmentScoreMeasurer {
     public:
-        AlignmentScoreEvaluatorInterface *getScoreEvaluator() const;
+        AlignmentScoreProviderInterface *getScoreProvider() const;
 
-        void setScoreEvaluator(AlignmentScoreEvaluatorInterface *evaluator);
+        void setScoreProvider(AlignmentScoreProviderInterface *provider);
 
         void setStrand1(std::string strand1);
 
@@ -33,7 +33,7 @@ namespace blcknx {
         long measure(std::string strand1, std::string strand2);
 
     protected:
-        AlignmentScoreEvaluatorInterface *evaluator;
+        AlignmentScoreProviderInterface *provider;
         std::string strand1;
         std::string strand2;
         std::vector<long> front;

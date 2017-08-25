@@ -9,13 +9,14 @@ void Edta::build() {
 }
 
 void Edta::calc() {
+    result.setScoreProvider(&provider);
     result.setStrand1(model[0]);
     result.setStrand2(model[1]);
     result.run();
 }
 
 void Edta::format() {
-    output += std::to_string(result.getAlignmentDistance()) + "\n";
+    output += std::to_string(-result.getAlignmentDistance()) + "\n";
     output += result.getAlignment1() + "\n";
     output += result.getAlignment2();
 }
