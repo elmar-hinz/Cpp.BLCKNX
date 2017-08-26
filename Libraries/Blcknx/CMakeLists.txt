@@ -5,6 +5,7 @@ add_library(blcknx STATIC
         src/AlignmentScoreMeasurer.cpp
         src/Aligner.cpp
         src/TableReader.cpp
+        src/Alignment.cpp
         src/AlignmentScoreProviders/Blosum62ScoreProvider.cpp
         src/AlignmentScoreProviders/Pam250ScoreProvider.cpp
         src/AlignmentScoreProviders/LongestCommenSubsequenceScoreProvider.cpp
@@ -69,3 +70,10 @@ add_executable(EditDistanceScoreProviderTest
 target_link_libraries(EditDistanceScoreProviderTest gtest gtest_main blcknx)
 add_test(NAME EditDistanceScoreProvider COMMAND EditDistanceScoreProviderTest)
 
+add_executable(AlignmentTest
+        tests/AlignmentTest.cpp
+        include/AlignmentScoreProviderInterface.h
+        include/Alignment.h
+        )
+target_link_libraries(AlignmentTest gtest gtest_main blcknx)
+add_test(NAME Alignment COMMAND AlignmentTest)
