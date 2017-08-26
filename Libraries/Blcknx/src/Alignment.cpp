@@ -88,7 +88,7 @@ namespace blcknx {
         return strand2.substr(motifBegin2, motifLength2);
     }
 
-    unsigned long Alignment::getAlignmentLength() {
+    unsigned long Alignment::getAlignmentLength() const {
         return alignment1.size();
     }
 

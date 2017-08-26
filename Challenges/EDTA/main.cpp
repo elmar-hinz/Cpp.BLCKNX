@@ -6,7 +6,7 @@
 
 int main()
 {
-    Edta challenge;
+    blcknx::Edta challenge;
     challenge.run();
     return 0;
 }

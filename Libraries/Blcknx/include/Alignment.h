@@ -44,7 +44,7 @@ namespace blcknx {
 
         const std::string getMotif2() const;
 
-        unsigned long getAlignmentLength();
+        unsigned long getAlignmentLength() const;
 
     protected:
         long score;
@@ -58,10 +58,10 @@ namespace blcknx {
         std::string strand2;
         std::string alignment1;
         std::string alignment2;
-        unsigned long motifBegin1;
-        unsigned long motifBegin2;
-        unsigned long motifLength1;
-        unsigned long motifLength2;
+        unsigned long motifBegin1 = 0;
+        unsigned long motifBegin2 = 0;
+        unsigned long motifLength1 = 0;
+        unsigned long motifLength2 = 0;
     };
 }
 #endif //BLCKNX_ALIGNMENT_H

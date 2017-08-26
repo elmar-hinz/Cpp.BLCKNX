@@ -3,21 +3,26 @@
 //
 
 #include "Edta.h"
+#include "Aligner.h"
 
-void Edta::build() {
-    model = fasta_strands(to_lines(input));
+namespace blcknx {
+    void Edta::build() {
+        model = fasta_strands(to_lines(input));
+    }
+
+    void Edta::calc() {
+        Aligner aligner;
+        aligner.setScoreProvider(&provider);
+        aligner.setStrand1(model[0]);
+        aligner.setStrand2(model[1]);
+        aligner.run();
+        result = aligner.getAlignment();
+    }
+
+    void Edta::format() {
+        output += std::to_string(-result.getScore()) + "\n";
+        output += result.getAlignment1() + "\n";
+        output += result.getAlignment2();
+    }
+
 }
-
-void Edta::calc() {
-    result.setScoreProvider(&provider);
-    result.setStrand1(model[0]);
-    result.setStrand2(model[1]);
-    result.run();
-}
-
-void Edta::format() {
-    output += std::to_string(-result.getAlignmentDistance()) + "\n";
-    output += result.getAlignment1() + "\n";
-    output += result.getAlignment2();
-}
-

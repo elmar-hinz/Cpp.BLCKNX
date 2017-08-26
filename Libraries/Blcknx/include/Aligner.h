@@ -7,54 +7,29 @@
 
 #include <string>
 #include "EditDistanceScoreProvider.h"
+#include "Alignment.h"
 
 namespace blcknx {
     class AlignmentScoreProviderInterface;
 
+    class AlignmentScoreProviderInterface;
+
     class Aligner {
     public:
+
         void setScoreProvider(AlignmentScoreProviderInterface *scoreProvider);
 
         void setStrand1(const std::string &strand1);
 
         void setStrand2(const std::string &strand2);
 
-        const std::string &getStrand1() const;
-
-        const std::string &getStrand2() const;
-
-        const std::string &getAlignment1() const;
-
-        const std::string &getAlignment2() const;
-
-        long getAlignmentDistance() const;
-
-        long getAlignmentLength() const;
+        const Alignment getAlignment() const;
 
         void run();
 
     protected:
-        std::string strand1;
-        std::string strand2;
-        std::string alignment1;
-        std::string alignment2;
-        long alignmentDistance;
-        long alignmentLength;
-        AlignmentScoreProviderInterface * scoreProvider;
-
-
-        struct Alignment {
-            long distance;
-            std::string strand1;
-            std::string strand2;
-
-            bool operator==(const Alignment &other) const {
-                return (distance == other.distance
-                        && strand1 == other.strand1
-                        && strand2 == other.strand2
-                );
-            }
-        };
+        Alignment alignment;
+        AlignmentScoreProviderInterface *scoreProvider;
 
         struct Splitting {
             std::string prefix;
@@ -97,6 +72,8 @@ namespace blcknx {
 
         template<typename T>
         T reversed(T copy);
+
+        long worstScore();
     };
 }
 

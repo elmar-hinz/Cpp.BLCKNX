@@ -9,19 +9,21 @@
 #include "Aligner.h"
 #include "EditDistanceScoreProvider.h"
 
-class Edta : public blcknx::Challenge {
+namespace blcknx {
 
-protected:
-    void build() override;
+    class Edta : public blcknx::Challenge {
 
-    void calc() override;
+    protected:
+        void build() override;
 
-    void format() override;
+        void calc() override;
 
-    std::vector<std::string> model;
-    blcknx::Aligner result;
-    blcknx::EditDistanceScoreProvider provider;
-};
+        void format() override;
 
+        std::vector<std::string> model;
+        blcknx::Alignment result;
+        blcknx::EditDistanceScoreProvider provider;
+    };
 
+}
 #endif //BLCKNX

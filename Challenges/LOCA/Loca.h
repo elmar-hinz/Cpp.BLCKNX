@@ -23,12 +23,15 @@ namespace blcknx {
         std::vector<std::string> model;
         Pam250ScoreProvider provider;
         AlignmentScoreMeasurer measurer;
-//        struct Result {
-//            long score;
-//            std::string motif1;
-//            std::string motif2;
-//        };
-//        Result result;
+        struct Result {
+            long score;
+            std::string motif1;
+            std::string motif2;
+        };
+        Result result;
+
+        template<typename T>
+        T reversed(T copy);
     };
 
 }

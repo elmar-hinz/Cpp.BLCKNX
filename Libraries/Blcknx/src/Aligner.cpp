@@ -9,62 +9,51 @@
 #include "AlignmentScoreMeasurer.h"
 
 namespace blcknx {
+
+    const Alignment Aligner::getAlignment() const {
+        return alignment;
+    }
+
+    void Aligner::setStrand1(const std::string &strand1) {
+        alignment.setStrand1(strand1);
+    }
+
+    void Aligner::setStrand2(const std::string &strand2) {
+        alignment.setStrand2(strand2);
+    }
+
     void Aligner::setScoreProvider(
             AlignmentScoreProviderInterface *scoreProvider
     ) {
         this->scoreProvider = scoreProvider;
     }
 
-    const std::string &Aligner::getStrand1() const {
-        return strand1;
-    }
-
-    void Aligner::setStrand1(const std::string &strand1) {
-        this->strand1 = strand1;
-    }
-
-    const std::string &Aligner::getStrand2() const {
-        return strand2;
-    }
-
-    void Aligner::setStrand2(const std::string &strand2) {
-        this->strand2 = strand2;
-    }
-
     void Aligner::run() {
-        Alignment alignment = align(strand1, strand2);
-        alignment1 = alignment.strand1;
-        alignment2 = alignment.strand2;
-        alignmentLength = alignment1.size();
-        alignmentDistance = alignment.distance;
+        alignment = align(alignment.getStrand1(), alignment.getStrand2());
+        alignment.setMotifLength1(alignment.getStrand1().size());
+        alignment.setMotifLength2(alignment.getStrand2().size());
     }
 
-    const std::string &Aligner::getAlignment1() const {
-        return alignment1;
-    }
-
-    const std::string &Aligner::getAlignment2() const {
-        return alignment2;
-    }
-
-    long Aligner::getAlignmentDistance() const {
-        return alignmentDistance;
-    }
-
-    long Aligner::getAlignmentLength() const {
-        return alignmentLength;
-    }
-
-    Aligner::Alignment Aligner::align(
+    Alignment Aligner::align(
             std::string strand1, std::string strand2
     ) {
+        Alignment alignment;
+        alignment.setStrand1(strand1);
+        alignment.setStrand2(strand2);
+        alignment.setScore(0);
 
         // Initialize
         if (strand1.empty()) {
-            return {0, std::string(strand2.size(), '-'), strand2};
+            std::string alignment1(strand2.size(), '-');
+            alignment.setAlignment1(alignment1);
+            alignment.setAlignment2(strand2);
+            return alignment;
         }
         if (strand2.empty()) {
-            return {0, strand1, std::string(strand1.size(), '-')};
+            std::string alignment2(strand1.size(), '-');
+            alignment.setAlignment1(strand1);
+            alignment.setAlignment2(alignment2);
+            return alignment;
         }
 
         // Split
@@ -82,14 +71,17 @@ namespace blcknx {
         Alignment right_alignment = align(meeting.suffix, splitting.suffix);
 
         // Build result
-        Alignment alignment;
-        alignment.distance = meeting.distance;
-        alignment.strand1 = left_alignment.strand1
-                            + meeting.char1
-                            + right_alignment.strand1;
-        alignment.strand2 = left_alignment.strand2
-                            + meeting.char2
-                            + right_alignment.strand2;
+        alignment.setScore(meeting.distance);
+        alignment.setAlignment1(
+                left_alignment.getAlignment1()
+                + meeting.char1
+                + right_alignment.getAlignment1()
+        );
+        alignment.setAlignment2(
+                left_alignment.getAlignment2()
+                + meeting.char2
+                + right_alignment.getAlignment2()
+        );
         return alignment;
     }
 
@@ -111,8 +103,7 @@ namespace blcknx {
             std::string strand,
             char splitter
     ) {
-        long total = -strand1.size() - strand2.size();
-        Meeting best = {total, '-', splitter, "", ""};
+        Meeting best = {worstScore(), '-', splitter, "", ""};
         long strandSize = strand.size();
         for (unsigned long l = 0; l <= strandSize; ++l) {
             std::string prefix, suffix;
@@ -155,5 +146,8 @@ namespace blcknx {
         return copy;
     }
 
+    long Aligner::worstScore() {
+        return - alignment.getStrand1().size() - alignment.getStrand2().size();
+    }
 
 }

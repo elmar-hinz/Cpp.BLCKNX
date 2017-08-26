@@ -26,10 +26,10 @@ add_executable(AlignmentScoreMeasurerTest include/AlignmentScoreMeasurer.h
 target_link_libraries(AlignmentScoreMeasurerTest gtest gtest_main blcknx)
 add_test(NAME AlignmentScoreMeasurer COMMAND AlignmentScoreMeasurerTest)
 
-add_executable(EditDistanceAlignmentTest include/Aligner.h
+add_executable(AlignerTest include/Aligner.h
         tests/AlignerTest.cpp)
-target_link_libraries(EditDistanceAlignmentTest gtest gtest_main blcknx)
-add_test(NAME EditDistanceAlignment COMMAND EditDistanceAlignmentTest)
+target_link_libraries(AlignerTest gtest gtest_main blcknx)
+add_test(NAME Aligner COMMAND AlignerTest)
 
 add_executable(TableReaderTest
         tests/TableReaderTest.cpp

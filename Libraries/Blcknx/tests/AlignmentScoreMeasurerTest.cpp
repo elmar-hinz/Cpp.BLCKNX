@@ -8,12 +8,14 @@
 
 #include "AlignmentScoreMeasurer.h"
 #include "LongestCommenSubsequenceScoreProvider.h"
-
+#include "Pam250ScoreProvider.h"
 
 namespace blcknx {
     class AlignmentScoreMeasurerTest : public ::testing::Test {
     public:
-        class Provider : public LongestCommenSubsequenceScoreProvider {};
+        class Provider : public LongestCommenSubsequenceScoreProvider {
+        };
+
         Provider provider;
         AlignmentScoreMeasurer measurer;
 
@@ -64,5 +66,45 @@ namespace blcknx {
         measurer.measure();
         EXPECT_EQ(1, measurer.getScore());
         EXPECT_EQ(std::vector<long>({0, 1, 1}), measurer.getFront());
+    }
+
+
+    class AlignmentScoreMeasurerTest2 : public ::testing::Test {
+    public:
+        Pam250ScoreProvider provider;
+        AlignmentScoreMeasurer measurer;
+
+    protected:
+
+        void SetUp() override {
+            Pam250ScoreProvider e;
+            provider = std::move(e);
+            provider.setGapPenalty(-5);
+            AlignmentScoreMeasurer m;
+            measurer = std::move(m);
+            measurer.setScoreProvider(&provider);
+        }
+    };
+
+    TEST_F(AlignmentScoreMeasurerTest2, global_alignment) {
+        measurer.setStrand1("MEANLYPRTEINSTRING");
+        measurer.setStrand2("PLEASANTLYEINSTEIN");
+        measurer.measure();
+        EXPECT_EQ(13, measurer.getScore());
+        AlignmentScoreMeasurer::BestScore best;
+        best = measurer.getBestScore();
+        EXPECT_EQ(18, best.score);
+    }
+
+    TEST_F(AlignmentScoreMeasurerTest2, free_rides) {
+        measurer.setStrand1("MEANLYPRTEINSTRINGS");
+        measurer.setStrand2("PLEASANTLYEINSTEINISDEAD");
+        measurer.enableFreeRides();
+        measurer.measure();
+        AlignmentScoreMeasurer::BestScore best = measurer.getBestScore();
+        EXPECT_EQ(23, best.score);
+        EXPECT_EQ(17, best.index1);
+        EXPECT_EQ(18, best.index2);
+
     }
 }

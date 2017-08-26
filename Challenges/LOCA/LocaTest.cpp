@@ -20,7 +20,12 @@ namespace blcknx {
         std::string expected = "23\n"
                 "LYPRTEINSTRIN\n"
                 "LYEINSTEIN";
-        EXPECT_EQ(expected, challenge.main(given));
+        std::string actual = challenge.main(given);
+        EXPECT_EQ(expected, actual);
     }
-
+/*
+ * 23
+ * ASANTLYEINSTEI
+ * NX \0INSTRIN
+ */
 }

@@ -16,10 +16,10 @@ namespace blcknx {
         EditDistanceScoreProvider provider;
         fixture.setScoreProvider(&provider);
         fixture.setStrand1("strand1");
-        EXPECT_EQ("strand1", fixture.getStrand1());
+        EXPECT_EQ("strand1", fixture.getAlignment().getStrand1());
 
         fixture.setStrand2("strand2");
-        EXPECT_EQ("strand2", fixture.getStrand2());
+        EXPECT_EQ("strand2", fixture.getAlignment().getStrand2());
     }
 
     TEST(AlignerTest, march_match) {
@@ -78,8 +78,8 @@ namespace blcknx {
         Aligner fixture;
         EditDistanceScoreProvider provider;
         fixture.setScoreProvider(&provider);
-        fixture.strand1 = "AB";
-        fixture.strand2 = "AB";
+        fixture.setStrand1("AB");
+        fixture.setStrand2("AB");
         std::vector<long> left = {-0, -1, -2};
         std::vector<long> right = {-1, -0, -1};
         Aligner::Meeting actual, expectation;
@@ -108,8 +108,8 @@ namespace blcknx {
         Aligner fixture;
         EditDistanceScoreProvider provider;
         fixture.setScoreProvider(&provider);
-        fixture.strand1 = "AA";
-        fixture.strand2 = "BA";
+        fixture.setStrand1("AA");
+        fixture.setStrand2("BA");
         std::vector<long> left = {-0, -1, -2};
         std::vector<long> right = {-1, -0, -1};
         Aligner::Meeting actual, expectation;
@@ -136,8 +136,8 @@ namespace blcknx {
         Aligner fixture;
         EditDistanceScoreProvider provider;
         fixture.setScoreProvider(&provider);
-        fixture.strand1 = "A";
-        fixture.strand2 = "BA";
+        fixture.setStrand1("A");
+        fixture.setStrand2("BA");
         std::vector<long> left = {0, -1};
         std::vector<long> right = {0, -1};
         Aligner::Meeting actual, expectation;
@@ -166,8 +166,8 @@ namespace blcknx {
         Aligner fixture;
         EditDistanceScoreProvider provider;
         fixture.setScoreProvider(&provider);
-        fixture.strand1 = "BA";
-        fixture.strand2 = "A";
+        fixture.setStrand1("BA");
+        fixture.setStrand2("A");
         std::vector<long> left = {0, -1, -2};
         std::vector<long> right = {-1, 0, -1};
         Aligner::Meeting actual, expectation;
@@ -190,9 +190,11 @@ namespace blcknx {
         fixture.setStrand1("AABABABB");
         fixture.setStrand2("CCCACACAA");
         fixture.run();
-        EXPECT_EQ("A--ABABABB", fixture.getAlignment1());
-        EXPECT_EQ("CCCACACAA-", fixture.getAlignment2());
-        EXPECT_EQ(-7, fixture.getAlignmentDistance());
-        EXPECT_EQ(10, fixture.getAlignmentLength());
+        EXPECT_EQ("A--ABABABB", fixture.getAlignment().getAlignment1());
+        EXPECT_EQ("CCCACACAA-", fixture.getAlignment().getAlignment2());
+        EXPECT_EQ(-7, fixture.getAlignment().getScore());
+        EXPECT_EQ(10, fixture.getAlignment().getAlignmentLength());
+        EXPECT_EQ(8, fixture.getAlignment().getMotifLength1());
+        EXPECT_EQ(9, fixture.getAlignment().getMotifLength2());
     }
 }
