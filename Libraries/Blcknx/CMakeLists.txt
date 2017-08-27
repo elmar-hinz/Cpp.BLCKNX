@@ -10,6 +10,7 @@ add_library(blcknx STATIC
         src/AlignmentScoreProviders/Pam250ScoreProvider.cpp
         src/AlignmentScoreProviders/LongestCommenSubsequenceScoreProvider.cpp
         src/AlignmentScoreProviders/EditDistanceScoreProvider.cpp
+        src/AlignmentScoreProviders/MismatchScoreProvider.cpp
         )
 
 # Testing
@@ -69,6 +70,14 @@ add_executable(EditDistanceScoreProviderTest
         )
 target_link_libraries(EditDistanceScoreProviderTest gtest gtest_main blcknx)
 add_test(NAME EditDistanceScoreProvider COMMAND EditDistanceScoreProviderTest)
+
+add_executable(MismatchScoreProviderTest
+        tests/MismatchScoreProviderTest.cpp
+        include/AlignmentScoreProviderInterface.h
+        include/MismatchScoreProvider.h
+        )
+target_link_libraries(MismatchScoreProviderTest gtest gtest_main blcknx)
+add_test(NAME MismatchScoreProvider COMMAND MismatchScoreProviderTest)
 
 add_executable(AlignmentTest
         tests/AlignmentTest.cpp

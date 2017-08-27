@@ -31,12 +31,20 @@ namespace blcknx {
 
     };
 
-    TEST_F(AlignmentScoreMeasurerTest, getters) {
+    TEST_F(AlignmentScoreMeasurerTest, gettersAndSetters) {
         EXPECT_EQ(&provider, measurer.getScoreProvider());
         measurer.setStrand1("S1");
         measurer.setStrand2("S2");
         EXPECT_EQ("S1", measurer.getStrand1());
         EXPECT_EQ("S2", measurer.getStrand2());
+    }
+
+    TEST_F(AlignmentScoreMeasurerTest, freeRides) {
+        EXPECT_EQ(measurer.NoFreeRides, measurer.getFreeRideDimensions());
+        measurer.setFreeRideDimensions(measurer.BorderFreeRides);
+        EXPECT_EQ(measurer.BorderFreeRides, measurer.getFreeRideDimensions());
+        measurer.setFreeRideDimensions(measurer.FullFreeRides);
+        EXPECT_EQ(measurer.FullFreeRides, measurer.getFreeRideDimensions());
     }
 
     TEST_F(AlignmentScoreMeasurerTest, zero) {
@@ -96,15 +104,26 @@ namespace blcknx {
         EXPECT_EQ(18, best.score);
     }
 
-    TEST_F(AlignmentScoreMeasurerTest2, free_rides) {
+    TEST_F(AlignmentScoreMeasurerTest2, full_free_rides) {
         measurer.setStrand1("MEANLYPRTEINSTRINGS");
         measurer.setStrand2("PLEASANTLYEINSTEINISDEAD");
-        measurer.enableFreeRides();
+        measurer.setFreeRideDimensions(measurer.FullFreeRides);
         measurer.measure();
         AlignmentScoreMeasurer::BestScore best = measurer.getBestScore();
         EXPECT_EQ(23, best.score);
         EXPECT_EQ(17, best.index1);
         EXPECT_EQ(18, best.index2);
 
+    }
+
+    TEST_F(AlignmentScoreMeasurerTest2, border_free_rides) {
+        measurer.setStrand1("MEANLYPRTEINSTRINGS");
+        measurer.setStrand2("PLEASANTLYEINSTEINISDEAD");
+        measurer.setFreeRideDimensions(measurer.BorderFreeRides);
+        measurer.measure();
+        AlignmentScoreMeasurer::BestScore best = measurer.getBestScore();
+        EXPECT_EQ(18, best.score);
+        EXPECT_EQ(17, best.index1);
+        EXPECT_EQ(18, best.index2);
     }
 }

@@ -7,6 +7,16 @@
 
 namespace blcknx {
 
+    void AlignmentScoreMeasurer::setFreeRideDimensions(
+            AlignmentScoreMeasurer::FreeRideDimensions dimension) {
+        freeRidesDimensions = dimension;
+    }
+
+    AlignmentScoreMeasurer::FreeRideDimensions
+    AlignmentScoreMeasurer::getFreeRideDimensions() {
+        return freeRidesDimensions;
+    }
+
     void AlignmentScoreMeasurer::setScoreProvider(
             AlignmentScoreProviderInterface *provider) {
         this->provider = provider;
@@ -15,18 +25,6 @@ namespace blcknx {
     AlignmentScoreProviderInterface *
     AlignmentScoreMeasurer::getScoreProvider() const {
         return provider;
-    }
-
-    void AlignmentScoreMeasurer::enableFreeRides() {
-        freeRides = true;
-    }
-
-    void AlignmentScoreMeasurer::disableFreeRides() {
-        freeRides = false;
-    }
-
-    bool AlignmentScoreMeasurer::hasFreeRides() const {
-        return freeRides;
     }
 
     void AlignmentScoreMeasurer::setStrand1(std::string strand1) {
@@ -62,7 +60,9 @@ namespace blcknx {
         for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
             char1 = strand1[index1 - 1];
             long best = last[index1 - 1] + provider->getDeletionScore(char1);
-            if (hasFreeRides()) { best = std::max(best, (long) 0); }
+            if (freeRidesDimensions == BorderFreeRides or freeRidesDimensions == FullFreeRides) {
+                best = std::max(best, (long) 0);
+            }
             last[index1] = best;
             if (best > bestScore.score) { bestScore = {best, index1, 0}; }
         }
@@ -79,7 +79,9 @@ namespace blcknx {
                 long s = provider->getScore(char1, char2);
                 long match = last[index1 - 1] + s;
                 long best = std::max(indel, match);
-                if (hasFreeRides()) { best = std::max(best, (long) 0); }
+                if (freeRidesDimensions == FullFreeRides) {
+                    best = std::max(best, (long) 0);
+                }
                 current[index1] = best;
                 if (best > bestScore.score) {
                     bestScore = {best, index1, index2};

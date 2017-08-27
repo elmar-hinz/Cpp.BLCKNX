@@ -1,28 +1,27 @@
 //
-// Created by Elmar Hinz on 2017-08-22 13:05:12.113478.
+// Created by Elmar Hinz on 2017-08-27 07:50:16.428064.
 //
 
-#include "Edta.h"
-#include "Aligner.h"
+#include "Sims.h"
 
 namespace blcknx {
-    void Edta::build() {
+
+    void Sims::build() {
         model = fasta_strands(to_lines(input));
     }
 
-    void Edta::calc() {
-        Aligner aligner;
+    void Sims::calc() {
         aligner.setScoreProvider(&provider);
         aligner.setStrand1(model[0]);
         aligner.setMotifOrStrand2(model[1]);
-        aligner.alignGlobally();
+        aligner.alignFitting();
         result = aligner.getAlignment();
     }
 
-    void Edta::format() {
-        output += std::to_string(-result.getScore()) + "\n";
+    void Sims::format() {
+        output += std::to_string(result.getScore()) + "\n";
         output += result.getAlignment1() + "\n";
         output += result.getAlignment2();
-    }
-
+    }        
+    
 }

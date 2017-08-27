@@ -29,7 +29,7 @@ namespace blcknx {
     void Loca::calc() {
         provider.setGapPenalty(-5);
         measurer.setScoreProvider(&provider);
-        measurer.enableFreeRides();
+        measurer.setFreeRideDimensions(measurer.FullFreeRides);
         unsigned long begin1, begin2, end1, end2;
         { // get best forward
             measurer.setStrand1(model[0]);
