@@ -45,6 +45,8 @@ namespace blcknx {
         const std::string getMotif2() const;
 
         unsigned long getAlignmentLength() const;
+        
+        const std::string toString() const;
 
     protected:
         long score;

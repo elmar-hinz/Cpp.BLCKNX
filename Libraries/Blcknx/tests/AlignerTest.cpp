@@ -10,6 +10,7 @@
 #include "Aligner.h"
 #include "MismatchScoreProvider.h"
 #include "EditDistanceScoreProvider.h"
+#include "Pam250ScoreProvider.h"
 
 namespace blcknx {
 
@@ -224,4 +225,17 @@ namespace blcknx {
                   fixture.getAlignment().getAlignment2());
     }
 
+    TEST(AlignerTest, locally) {
+        Aligner fixture;
+        Pam250ScoreProvider provider;
+        provider.setGapPenalty(-5);
+        fixture.setScoreProvider(&provider);
+        fixture.setStrand1( "MEANLYPRTEINSTRING");
+        fixture.setMotifOrStrand2("PLEASANTLYEINSTEIN");
+        fixture.alignLocally();
+        std::cerr << fixture.getAlignment().toString() << std::endl;
+        EXPECT_EQ(23, fixture.getAlignment().getScore());
+        EXPECT_EQ("LYPRTEINSTRIN", fixture.getAlignment().getMotif1());
+        EXPECT_EQ("LYEINSTEIN", fixture.getAlignment().getMotif2());
+    }
 }

@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include <numeric>
+#include <iostream>
 #include "Aligner.h"
 #include "AlignmentScoreMeasurer.h"
 
@@ -34,15 +35,53 @@ namespace blcknx {
         alignment.setMotifLength2(alignment.getStrand2().size());
     }
 
-    void Aligner::alignLocally() {
-        // TODO
-    }
-
     void Aligner::alignFitting() {
         alignment = align(alignment.getStrand1(), alignment.getStrand2(), true,
                           true);
         alignment.setMotifLength1(alignment.getStrand1().size());
         alignment.setMotifLength2(alignment.getStrand2().size());
+    }
+
+    void Aligner::alignLocally() {
+        AlignmentScoreMeasurer measurer;
+        measurer.setFreeRideDimensions(measurer.FullFreeRides);
+        measurer.setScoreProvider(scoreProvider);
+        unsigned long begin1, begin2, end1, end2;
+        { // get best forward
+            measurer.setStrand1(alignment.getStrand1());
+            measurer.setStrand2(alignment.getStrand2());
+            measurer.measure();
+            AlignmentScoreMeasurer::BestScore best = measurer.getBestScore();
+            end1 = best.index1;
+            end2 = best.index2;
+        }
+        { // get best backwards
+            measurer.setStrand1(reversed(alignment.getStrand1()));
+            measurer.setStrand2(reversed(alignment.getStrand2()));
+            measurer.measure();
+            AlignmentScoreMeasurer::BestScore best = measurer.getBestScore();
+            begin1 = alignment.getStrand1().size() - best.index1;
+            begin2 = alignment.getStrand2().size() - best.index2;
+        }
+        { // align substrings
+            std::string strand1 = alignment.getStrand1().substr(begin1,
+                                                                end1 - begin1);
+            std::string strand2 = alignment.getStrand2().substr(begin2,
+                                                                end2 - begin2);
+            Aligner subAligner;
+            subAligner.setScoreProvider(scoreProvider);
+            subAligner.setStrand1(strand1);
+            subAligner.setMotifOrStrand2(strand2);
+            subAligner.alignGlobally();
+            Alignment sub = subAligner.getAlignment();
+            alignment.setScore(sub.getScore());
+            alignment.setAlignment1(sub.getAlignment1());
+            alignment.setAlignment2(sub.getAlignment2());
+            alignment.setMotifBegin1(begin1);
+            alignment.setMotifBegin2(begin2);
+            alignment.setMotifLength1(end1 - begin1);
+            alignment.setMotifLength2(end2 - begin2);
+        }
     }
 
     Alignment Aligner::align(

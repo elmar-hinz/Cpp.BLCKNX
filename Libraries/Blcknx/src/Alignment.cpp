@@ -3,6 +3,7 @@
 //
 
 #include <string>
+#include <sstream>
 #include "Alignment.h"
 
 namespace blcknx {
@@ -80,16 +81,31 @@ namespace blcknx {
         this->motifLength2 = motifLength2;
     }
 
-    const std::string  Alignment::getMotif1() const {
+    const std::string Alignment::getMotif1() const {
         return strand1.substr(motifBegin1, motifLength1);
     }
 
-    const std::string  Alignment::getMotif2() const {
+    const std::string Alignment::getMotif2() const {
         return strand2.substr(motifBegin2, motifLength2);
     }
 
     unsigned long Alignment::getAlignmentLength() const {
         return alignment1.size();
+    }
+
+    const std::string Alignment::toString() const {
+        std::stringstream out;
+        out << "Strand1: " << getStrand1() << std::endl;
+        out << "Strand2: " << getStrand2() << std::endl;
+        out << "Score: " << getScore() << std::endl;
+        out << "Alignment length: " << getAlignmentLength() << std::endl;
+        out << "Alignment1: " << getAlignment1() << std::endl;
+        out << "Alignment2: " << getAlignment2() << std::endl;
+        out << "Motif1 (" << getMotifBegin1() << ", " << getMotifLength1()
+            << "): " << getMotif1() << std::endl;
+        out << "Motif2 (" << getMotifBegin2() << ", " << getMotifLength2()
+            << "): " << getMotif2() << std::endl;
+        return out.str();
     }
 
 }

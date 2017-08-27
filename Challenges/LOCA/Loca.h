@@ -6,7 +6,7 @@
 #define BLCKNX_LOCA_H
 
 #include <Challenge.h>
-#include "AlignmentScoreMeasurer.h"
+#include "Aligner.h"
 #include "Pam250ScoreProvider.h"
 
 namespace blcknx {
@@ -22,16 +22,8 @@ namespace blcknx {
 
         std::vector<std::string> model;
         Pam250ScoreProvider provider;
-        AlignmentScoreMeasurer measurer;
-        struct Result {
-            long score;
-            std::string motif1;
-            std::string motif2;
-        };
-        Result result;
-
-        template<typename T>
-        T reversed(T copy);
+        Aligner aligner;
+        Alignment result;
     };
 
 }
