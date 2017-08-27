@@ -156,7 +156,7 @@ namespace blcknx {
     ) {
         AlignmentScoreMeasurer measurer;
         if (zeroBorders) {
-            measurer.setFreeRideDimensions(measurer.BorderFreeRides);
+            measurer.setFreeRideDimensions(measurer.HalfFreeRides);
         }
         measurer.setScoreProvider(scoreProvider);
         measurer.setStrand1(strand1);

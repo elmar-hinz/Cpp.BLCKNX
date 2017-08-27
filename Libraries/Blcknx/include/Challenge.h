@@ -18,7 +18,6 @@ namespace blcknx {
         std::string main(std::string input);
 
     protected:
-
         std::string input;
         std::string output;
 

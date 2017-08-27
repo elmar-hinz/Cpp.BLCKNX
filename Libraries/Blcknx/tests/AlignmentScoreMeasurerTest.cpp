@@ -41,8 +41,8 @@ namespace blcknx {
 
     TEST_F(AlignmentScoreMeasurerTest, freeRides) {
         EXPECT_EQ(measurer.NoFreeRides, measurer.getFreeRideDimensions());
-        measurer.setFreeRideDimensions(measurer.BorderFreeRides);
-        EXPECT_EQ(measurer.BorderFreeRides, measurer.getFreeRideDimensions());
+        measurer.setFreeRideDimensions(measurer.HalfFreeRides);
+        EXPECT_EQ(measurer.HalfFreeRides, measurer.getFreeRideDimensions());
         measurer.setFreeRideDimensions(measurer.FullFreeRides);
         EXPECT_EQ(measurer.FullFreeRides, measurer.getFreeRideDimensions());
     }
@@ -119,7 +119,7 @@ namespace blcknx {
     TEST_F(AlignmentScoreMeasurerTest2, border_free_rides) {
         measurer.setStrand1("MEANLYPRTEINSTRINGS");
         measurer.setStrand2("PLEASANTLYEINSTEINISDEAD");
-        measurer.setFreeRideDimensions(measurer.BorderFreeRides);
+        measurer.setFreeRideDimensions(measurer.HalfFreeRides);
         measurer.measure();
         AlignmentScoreMeasurer::BestScore best = measurer.getBestScore();
         EXPECT_EQ(18, best.score);

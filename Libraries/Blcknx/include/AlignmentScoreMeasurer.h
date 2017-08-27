@@ -12,7 +12,7 @@
 namespace blcknx {
     class AlignmentScoreMeasurer {
     public:
-        enum FreeRideDimensions {NoFreeRides, BorderFreeRides, FullFreeRides};
+        enum FreeRideDimensions {NoFreeRides, HalfFreeRides, FullFreeRides};
 
         void setScoreProvider(AlignmentScoreProviderInterface *provider);
 

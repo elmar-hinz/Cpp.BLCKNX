@@ -4,6 +4,7 @@
 
 #include "AlignmentScoreMeasurer.h"
 #include <numeric>
+#include <iostream>
 
 namespace blcknx {
 
@@ -54,23 +55,23 @@ namespace blcknx {
     void AlignmentScoreMeasurer::measure() {
         std::vector<long> last(strand1.size() + 1);
         std::vector<long> current(strand1.size() + 1);
-        char char1, char2;
         last[0] = 0;
         bestScore = {0, 0, 0};
         for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
-            char1 = strand1[index1 - 1];
-            long best = last[index1 - 1] + provider->getDeletionScore(char1);
-            if (freeRidesDimensions == BorderFreeRides or freeRidesDimensions == FullFreeRides) {
+            char char1 = strand1[index1 - 1];
+            long best = last[index1 - 1]
+                        + provider->getDeletionScore(char1);
+            if (freeRidesDimensions == HalfFreeRides or freeRidesDimensions == FullFreeRides) {
                 best = std::max(best, (long) 0);
             }
             last[index1] = best;
             if (best > bestScore.score) { bestScore = {best, index1, 0}; }
         }
         for (unsigned long index2 = 1; index2 <= strand2.size(); ++index2) {
-            char1 = strand2[index2 - 1];
+            char char1 = strand2[index2 - 1];
             current[0] = last[0] + provider->getInsertionScore(char1);
             for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
-                char2 = strand1[index1 - 1];
+                char char2 = strand1[index1 - 1];
                 long deletion = current[index1 - 1] +
                                 provider->getDeletionScore(char2);
                 long insertion =
