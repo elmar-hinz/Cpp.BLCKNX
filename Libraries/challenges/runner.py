@@ -14,15 +14,26 @@ class Runner:
     def main(self):
         if self.conf.args.list:
             self.list_challenges()
+        elif self.conf.args.clean:
+            self.clean()
+        elif self.conf.args.build:
+            if self.conf.args.challenge:
+                self.build_challenge_and_test()
+            else:
+                self.build_all()
         elif self.conf.args.unittest:
             if self.conf.args.challenge:
                 self.run_unittest()
             else:
                 self.conf.print_help()
+        elif self.conf.args.tests:
+            self.run_all_tests()
         elif self.conf.args.scaffold:
             if self.conf.args.challenge:
                 Scaffold(self.conf).scaffold()
                 self.reload_cmake()
+                self.build_challenge_and_test()
+                self.run_unittest()
             else:
                 self.conf.print_help()
         elif self.conf.args.challenge:
@@ -79,4 +90,18 @@ class Runner:
                 pointer.write(sample)
             with open(self.conf.get_result_file(), 'w') as pointer:
                 pointer.write(result)
+
+    def clean(self):
+        subprocess.call(['make', 'clean'], cwd=self.conf.build)
+
+    def build_challenge_and_test(self):
+        subprocess.call(['make', self.conf.get_test_target()],
+                        cwd=self.conf.build)
+
+    def build_all(self):
+        subprocess.call(['make'], cwd=self.conf.build)
+
+    def run_all_tests(self):
+        self.build_all()
+        subprocess.call(['make', 'test'], cwd=self.conf.build)
 

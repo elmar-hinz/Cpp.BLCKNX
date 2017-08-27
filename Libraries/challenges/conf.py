@@ -22,6 +22,10 @@ class Conf:
         self.parser.add_argument('challenge', nargs='?',
                                  help='the challenge to run, to scaffold or '
                                       'to test')
+        self.parser.add_argument('-b', '--build', action='store_true',
+                                 help='build challenge or all')
+        self.parser.add_argument('-c', '--clean', action='store_true',
+                                 help='clean all targets')
         self.parser.add_argument('-f', '--file', action='store',
                                  help='load sample from given file')
         self.parser.add_argument('-k', '--klass', action='store_true',
@@ -30,6 +34,8 @@ class Conf:
                                  help='list challenges')
         self.parser.add_argument('-s', '--scaffold', action='store_true',
                                  help="scaffold challenge")
+        self.parser.add_argument('-t', '--tests', action='store_true',
+                                 help='run all tests')
         self.parser.add_argument('-u', '--unittest', action='store_true',
                                  help='unittest challenge')
         self.parser.add_argument('-v', '--verbose', action='store_true',
@@ -58,6 +64,9 @@ class Conf:
 
     def get_challenge_name_lower(self):
         return self.args.challenge.lower()
+
+    def get_test_target(self):
+        return self.args.challenge.lower() + "_test"
 
     def get_challenge_dir(self):
         return os.path.realpath(
