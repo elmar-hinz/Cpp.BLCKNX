@@ -54,6 +54,22 @@ namespace blcknx {
         return result;
     }
 
+    const std::string &Challenge::getInput() const {
+        return input;
+    }
+
+    void Challenge::setInput(const std::string &input) {
+        this->input = input;
+    }
+
+    const std::string &Challenge::getOutput() const {
+        return output;
+    }
+
+    void Challenge::setOutput(const std::string &output) {
+        this->output = output;
+    }
+
 }
 
 

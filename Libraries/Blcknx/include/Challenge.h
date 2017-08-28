@@ -17,6 +17,14 @@ namespace blcknx {
 
         std::string main(std::string input);
 
+        const std::string &getInput() const;
+
+        void setInput(const std::string &input);
+
+        const std::string &getOutput() const;
+
+        void setOutput(const std::string &output);
+
     protected:
         std::string input;
         std::string output;
