@@ -53,44 +53,44 @@ namespace blcknx {
     }
 
     void AlignmentScoreMeasurer::measure() {
-        std::vector<long> last(strand1.size() + 1);
-        std::vector<long> current(strand1.size() + 1);
-        last[0] = 0;
+        std::vector<long> front(strand1.size() + 1);
+        front[0] = 0;
         bestScore = {0, 0, 0};
         for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
             char char1 = strand1[index1 - 1];
-            long best = last[index1 - 1]
+            long best = front[index1 - 1]
                         + provider->getDeletionScore(char1);
-            if (freeRidesDimensions == HalfFreeRides or freeRidesDimensions == FullFreeRides) {
+            if (freeRidesDimensions == HalfFreeRides or
+                freeRidesDimensions == FullFreeRides) {
                 best = std::max(best, (long) 0);
             }
-            last[index1] = best;
+            front[index1] = best;
             if (best > bestScore.score) { bestScore = {best, index1, 0}; }
         }
         for (unsigned long index2 = 1; index2 <= strand2.size(); ++index2) {
             char char1 = strand2[index2 - 1];
-            current[0] = last[0] + provider->getInsertionScore(char1);
+            long backup = front[0];
+            front[0] = front[0] + provider->getInsertionScore(char1);
             for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
                 char char2 = strand1[index1 - 1];
-                long deletion = current[index1 - 1] +
-                                provider->getDeletionScore(char2);
+                long deletion =
+                        front[index1 - 1] + provider->getDeletionScore(char2);
                 long insertion =
-                        last[index1] + provider->getInsertionScore(char1);
+                        front[index1] + provider->getInsertionScore(char1);
                 long indel = std::max(insertion, deletion);
-                long s = provider->getScore(char1, char2);
-                long match = last[index1 - 1] + s;
+                long match = backup + provider->getScore(char1, char2);
                 long best = std::max(indel, match);
                 if (freeRidesDimensions == FullFreeRides) {
                     best = std::max(best, (long) 0);
                 }
-                current[index1] = best;
+                backup = front[index1];
+                front[index1] = best;
                 if (best > bestScore.score) {
                     bestScore = {best, index1, index2};
                 }
             }
-            last = current;
         }
-        front = last;
+        this->front = front;
     }
 
     long AlignmentScoreMeasurer::measure(
