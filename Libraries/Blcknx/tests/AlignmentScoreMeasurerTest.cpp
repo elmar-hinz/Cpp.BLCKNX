@@ -47,6 +47,14 @@ namespace blcknx {
         EXPECT_EQ(measurer.FullFreeRides, measurer.getFreeRideDimensions());
     }
 
+    TEST_F(AlignmentScoreMeasurerTest, finalDeletions) {
+        EXPECT_TRUE(measurer.hasFinalDeletions());
+        measurer.disableFinalDeletions();
+        EXPECT_FALSE(measurer.hasFinalDeletions());
+        measurer.enableFinalDeletions();
+        EXPECT_TRUE(measurer.hasFinalDeletions());
+    }
+
     TEST_F(AlignmentScoreMeasurerTest, zero) {
         EXPECT_EQ(0, measurer.measure("", ""));
     }
@@ -125,5 +133,17 @@ namespace blcknx {
         EXPECT_EQ(18, best.score);
         EXPECT_EQ(17, best.index1);
         EXPECT_EQ(18, best.index2);
+    }
+
+    TEST_F(AlignmentScoreMeasurerTest2, final_deletion) {
+        measurer.setStrand1("YYPP");
+        measurer.setStrand2("YY");
+        measurer.measure();
+        std::vector<long> expectation = {-10, 5, 20, 15, 10};
+        EXPECT_EQ(expectation, measurer.getFront());
+        measurer.disableFinalDeletions();
+        measurer.measure();
+        expectation = {-10, 5, 20, 0, -5};
+        EXPECT_EQ(expectation, measurer.getFront());
     }
 }

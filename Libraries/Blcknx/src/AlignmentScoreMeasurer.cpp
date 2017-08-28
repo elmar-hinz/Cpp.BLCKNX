@@ -18,6 +18,18 @@ namespace blcknx {
         return freeRidesDimensions;
     }
 
+    void AlignmentScoreMeasurer::enableFinalDeletions() {
+        finalDeletions = true;
+    }
+
+    void AlignmentScoreMeasurer::disableFinalDeletions() {
+        finalDeletions = false;
+    }
+
+    bool AlignmentScoreMeasurer::hasFinalDeletions() const {
+        return finalDeletions;
+    }
+
     void AlignmentScoreMeasurer::setScoreProvider(
             AlignmentScoreProviderInterface *provider) {
         this->provider = provider;
@@ -53,10 +65,12 @@ namespace blcknx {
     }
 
     void AlignmentScoreMeasurer::measure() {
-        std::vector<long> front(strand1.size() + 1);
+        unsigned long length1 = strand1.size();
+        unsigned long length2 = strand2.size();
+        std::vector<long> front(length1 + 1);
         front[0] = 0;
         bestScore = {0, 0, 0};
-        for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
+        for (unsigned long index1 = 1; index1 <= length1; ++index1) {
             char char1 = strand1[index1 - 1];
             long best = front[index1 - 1]
                         + provider->getDeletionScore(char1);
@@ -67,17 +81,20 @@ namespace blcknx {
             front[index1] = best;
             if (best > bestScore.score) { bestScore = {best, index1, 0}; }
         }
-        for (unsigned long index2 = 1; index2 <= strand2.size(); ++index2) {
+        for (unsigned long index2 = 1; index2 <= length2; ++index2) {
             char char1 = strand2[index2 - 1];
             long backup = front[0];
             front[0] = front[0] + provider->getInsertionScore(char1);
-            for (unsigned long index1 = 1; index1 <= strand1.size(); ++index1) {
+            for (unsigned long index1 = 1; index1 <= length1; ++index1) {
                 char char2 = strand1[index1 - 1];
-                long deletion =
-                        front[index1 - 1] + provider->getDeletionScore(char2);
-                long insertion =
-                        front[index1] + provider->getInsertionScore(char1);
-                long indel = std::max(insertion, deletion);
+                long insertion = front[index1] + provider->getInsertionScore(char1);
+                long indel;
+                if(index2 == length2 && ! hasFinalDeletions()) {
+                    indel = insertion;
+                } else {
+                    long deletion = front[index1 - 1] + provider->getDeletionScore(char2);
+                    indel = std::max(insertion, deletion);
+                }
                 long match = backup + provider->getScore(char1, char2);
                 long best = std::max(indel, match);
                 if (freeRidesDimensions == FullFreeRides) {

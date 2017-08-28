@@ -12,7 +12,9 @@
 namespace blcknx {
     class AlignmentScoreMeasurer {
     public:
-        enum FreeRideDimensions {NoFreeRides, HalfFreeRides, FullFreeRides};
+        enum FreeRideDimensions {
+            NoFreeRides, HalfFreeRides, FullFreeRides
+        };
 
         void setScoreProvider(AlignmentScoreProviderInterface *provider);
 
@@ -22,6 +24,12 @@ namespace blcknx {
 
         FreeRideDimensions getFreeRideDimensions();
 
+        bool hasFinalDeletions() const;
+
+        void enableFinalDeletions();
+
+        void disableFinalDeletions();
+        
         void setStrand1(std::string strand1);
 
         void setStrand2(std::string strand2);
@@ -50,6 +58,7 @@ namespace blcknx {
     protected:
         AlignmentScoreProviderInterface *provider;
         FreeRideDimensions freeRidesDimensions = NoFreeRides;
+        bool finalDeletions = true;
         std::string strand1;
         std::string strand2;
         BestScore bestScore;
