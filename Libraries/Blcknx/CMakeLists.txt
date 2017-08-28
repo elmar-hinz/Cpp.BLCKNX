@@ -2,6 +2,7 @@
 include_directories(include)
 add_library(blcknx STATIC
         src/Challenge.cpp
+        src/CharacterTable.cpp
         src/AlignmentScoreMeasurer.cpp
         src/Aligner.cpp
         src/TableReader.cpp
@@ -21,6 +22,14 @@ add_executable(ChallengeTest
         )
 target_link_libraries(ChallengeTest gtest gtest_main blcknx)
 add_test(NAME Challenge COMMAND ChallengeTest)
+
+include(CTest)
+add_executable(CharacterTableTest
+        include/CharacterTable.h
+        tests/CharacterTableTest.cpp
+        )
+target_link_libraries(CharacterTableTest gtest gtest_main blcknx)
+add_test(NAME CharacterTable COMMAND CharacterTableTest)
 
 add_executable(AlignmentScoreMeasurerTest include/AlignmentScoreMeasurer.h
         tests/AlignmentScoreMeasurerTest.cpp)
