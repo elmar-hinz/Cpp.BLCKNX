@@ -67,7 +67,7 @@ namespace blcknx {
     void AlignmentScoreMeasurer::measure() {
         unsigned long length1 = strand1.size();
         unsigned long length2 = strand2.size();
-        std::vector<long> front(length1 + 1);
+        long front[length1 + 1];
         front[0] = 0;
         bestScore = {0, 0, 0};
         for (unsigned long index1 = 1; index1 <= length1; ++index1) {
@@ -87,12 +87,14 @@ namespace blcknx {
             front[0] = front[0] + provider->getInsertionScore(char1);
             for (unsigned long index1 = 1; index1 <= length1; ++index1) {
                 char char2 = strand1[index1 - 1];
-                long insertion = front[index1] + provider->getInsertionScore(char1);
+                long insertion =
+                        front[index1] + provider->getInsertionScore(char1);
                 long indel;
-                if(index2 == length2 && ! hasFinalDeletions()) {
+                if (index2 == length2 && !hasFinalDeletions()) {
                     indel = insertion;
                 } else {
-                    long deletion = front[index1 - 1] + provider->getDeletionScore(char2);
+                    long deletion = front[index1 - 1] +
+                                    provider->getDeletionScore(char2);
                     indel = std::max(insertion, deletion);
                 }
                 long match = backup + provider->getScore(char1, char2);
@@ -107,7 +109,7 @@ namespace blcknx {
                 }
             }
         }
-        this->front = front;
+        this->front = std::vector<long>( front, front + sizeof front / sizeof front[0]);
     }
 
     long AlignmentScoreMeasurer::measure(

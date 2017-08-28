@@ -18,21 +18,22 @@ namespace blcknx {
     }
 
     void Ksim::calc() {
-        result = find_pairs(model, find_ends(model));
-        for (int i = 0; i < result.size(); ++i) { result[i].first += 1; }
-        std::sort(result.begin(), result.end());
+        std::vector<Triple> triples = find_starts(model, find_ends(model));
+        result = expand_by_tolerance(model, triples);
+        for (auto &r : result) { r.start += 1; }
     }
 
     void Ksim::format() {
         std::stringstream out;
         for (auto line : result) {
-            out << line.first << " " << line.second << std::endl;
+            out << line.start << " " << line.length << std::endl;
         }
         output = out.str().substr(0, out.str().size() - 1);
     }
 
     std::vector<unsigned long> Ksim::find_ends(Ksim::Model model) {
         measurer.setFreeRideDimensions(measurer.HalfFreeRides);
+        measurer.disableFinalDeletions();
         measurer.setStrand1(model.strand);
         measurer.setStrand2(model.motif);
         measurer.measure();
@@ -46,13 +47,15 @@ namespace blcknx {
         return results;
     }
 
-    std::vector<std::pair<unsigned long, unsigned long>>
-    Ksim::find_pairs(Ksim::Model model, std::vector<unsigned long> ends) {
-        std::vector<std::pair<unsigned long, unsigned long>> pairs;
+    std::vector<Ksim::Triple>
+    Ksim::find_starts(Ksim::Model model,
+                      const std::vector<unsigned long> &ends) {
+        std::vector<Triple> triples;
         measurer.setStrand2(reversed(model.motif));
         measurer.setFreeRideDimensions(measurer.NoFreeRides);
+        measurer.disableFinalDeletions();
+        auto maxlength = model.distance + model.motif.size();
         for (auto end : reversed(ends)) {
-            auto maxlength = model.distance + model.motif.size();
             maxlength = maxlength > end ? end : maxlength;
             measurer.setStrand1(
                     reversed(model.strand.substr(end - maxlength, maxlength)));
@@ -60,12 +63,35 @@ namespace blcknx {
             auto front = measurer.getFront();
             for (unsigned long index = 0; index < front.size(); index++) {
                 if (front[index] >= -(long) model.distance) {
-                    std::pair<unsigned long, unsigned long> pair(end - index, index);
-                    pairs.push_back(pair);
+                    Triple triple = {end - index, end, front[index]};
+                    triples.push_back(triple);
                 }
             }
         }
-        return pairs;
+        return triples;
+    }
+
+    std::vector<Ksim::Result>
+    Ksim::expand_by_tolerance(Ksim::Model model, std::vector<Triple> triples) {
+        std::vector<Result> result;
+        unsigned long strand_length = model.strand.size();
+        for (auto triple : triples) {
+            long excess = model.distance + triple.score;
+            for (int pre = 0; pre <= excess; ++pre) {
+                for (int post = 0; post <= excess - pre; ++post) {
+                    long start = triple.start - pre;
+                    unsigned long length =
+                            pre + triple.end - triple.start + post;
+                    if (start >= 0 && triple.end + post <= strand_length) {
+                        Result entry = {(unsigned) start, length};
+                        result.push_back(entry);
+                    }
+                }
+            }
+        }
+        std::sort(result.begin(), result.end());
+        result.erase(std::unique(result.begin(), result.end()), result.end());
+        return result;
     }
 
     template<typename T>

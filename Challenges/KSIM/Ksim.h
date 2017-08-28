@@ -30,8 +30,25 @@ namespace blcknx {
             }
         };
 
+        struct Triple {
+            unsigned long start;
+            unsigned long end;
+            long score;
+        };
+
+        struct Result {
+            unsigned long start;
+            unsigned long length;
+            bool operator<(const Result &other) const {
+                return std::tie(start, length) < std::tie(other.start, other.length);
+            }
+            bool operator==(const Result &other) const {
+                return (start == other.start && length == other.length);
+            }
+        };
+
         Model model;
-        std::vector<std::pair<unsigned long, unsigned long>> result;
+        std::vector<Result> result;
         EditDistanceScoreProvider provider;
         AlignmentScoreMeasurer measurer;
 
@@ -43,11 +60,15 @@ namespace blcknx {
 
         std::vector<unsigned long> find_ends(Model model);
 
-        std::vector<std::pair<unsigned long, unsigned long>>
-        find_pairs(Model model, std::vector<unsigned long> ends);
+        std::vector<Triple>
+        find_starts(Model model, const std::vector<unsigned long> &ends);
+
+        std::vector<Result>
+        expand_by_tolerance(Model model, std::vector<Triple> triples);
 
         template<typename T>
         T reversed(T copy);
+
     };
 
 }
