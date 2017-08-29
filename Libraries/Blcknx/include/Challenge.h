@@ -26,6 +26,7 @@ namespace blcknx {
         void setOutput(const std::string &output);
 
     protected:
+        std::clock_t startTimeClock;
         std::string input;
         std::string output;
 
@@ -38,6 +39,8 @@ namespace blcknx {
         std::vector<std::string> to_lines(std::string input);
 
         std::vector<std::string> fasta_strands(std::vector<std::string> lines);
+
+        void logDuration(std::string msg="");
 
     };
 

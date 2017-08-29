@@ -29,14 +29,17 @@ macro(ucfirst result word)
     set(${result} ${c})
 endmacro()
 
-# Challenges
-add_subdirectory(${blcknx_dir})
-include_directories(${blcknx_dir}/include)
-
 # Tests
 include(CTest)
 add_subdirectory(${gtest_dir})
-include_directories(${gtest_SOURCE_DIR}/include)
+include_directories(
+        ${gtest_SOURCE_DIR}/include
+        ${gmock_SOURCE_DIR}/include
+)
+
+# Challenges
+add_subdirectory(${blcknx_dir})
+include_directories(${blcknx_dir}/include)
 
 # Process challenges
 subdirlist(challenges ${challenges_dir})

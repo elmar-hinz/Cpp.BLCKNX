@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <sstream>
+#include <iostream>
 #include "CharacterTable.h"
 
 namespace blcknx {
@@ -13,6 +14,7 @@ namespace blcknx {
     }
 
     void CharacterTable::read(std::string newick) {
+        auto start = std::clock();
         tokens = tokenize(newick);
         {
             unsigned long characterCount = 0;
@@ -37,6 +39,7 @@ namespace blcknx {
                     characterStack.push_back(characterIndex);
                     characterIndex++;
                 }
+                // First character must be alpha (no underscore).
                 if ((bool) std::isalpha(token[0])) {
                     unsigned long speciesIndex = species[token];
                     for (int i = 0; i < characterStack.size(); ++i) {
@@ -47,7 +50,6 @@ namespace blcknx {
             }
         }
         table.erase(table.begin());
-        std::sort(table.begin(), table.end());
     }
 
     std::vector<std::string> CharacterTable::tokenize(std::string &newick) {
@@ -67,10 +69,37 @@ namespace blcknx {
     std::string CharacterTable::to_string(CharacterTable table) {
         std::stringstream out;
         for (auto row : table.table) {
-            for (auto cell : row) { out << std::to_string(cell); }
+            for (auto cell : row) { out << std::to_string((int) cell); }
             out << std::endl;
         }
         return out.str();
+    }
+
+    std::vector<std::string> CharacterTable::getSpecies() const {
+        std::vector<std::string> result;
+        for (auto &&mapping : species) {
+            result.push_back(mapping.first);
+        }
+        return result;
+    }
+
+    std::vector<std::vector<bool>> CharacterTable::getTable() const {
+        return table;
+    }
+
+    std::vector<std::string> CharacterTable::getCharacterIds() const {
+        std::vector<std::string > result;
+        for (const auto &row : table) {
+            std::string id;
+            for (auto &&entry : row) { id += entry ? "1" : "0"; }
+            result.push_back(id);
+        }
+        return result;
+    }
+
+
+    unsigned long CharacterTable::getAmountOfSpecies() const {
+        return getSpecies().size();
     }
 
 }

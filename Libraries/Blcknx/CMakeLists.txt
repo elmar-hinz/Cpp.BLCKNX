@@ -23,7 +23,6 @@ add_executable(ChallengeTest
 target_link_libraries(ChallengeTest gtest gtest_main blcknx)
 add_test(NAME Challenge COMMAND ChallengeTest)
 
-include(CTest)
 add_executable(CharacterTableTest
         include/CharacterTable.h
         tests/CharacterTableTest.cpp
